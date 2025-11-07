@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, forwardRef, createContext, useContext } from "react";
+import React from "react";
 // src/contexts/SidebarContext.tsx
 type SidebarContextType = {
   isExpanded: boolean;
@@ -8,7 +8,7 @@ type SidebarContextType = {
 
 const SidebarContext = createContext<SidebarContextType | undefined>(undefined);
 
-export function SidebarProvider({ children }: { children: ReactNode }) {
+export function SidebarProvider({ children }: { children: any }) {
   const [isExpanded, setIsExpanded] = useState(true); // Default expanded
   const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout | null>(null);
 

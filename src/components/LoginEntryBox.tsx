@@ -48,7 +48,7 @@ const buttonStyle = {
 };
 const linkStyle = {
   display: "block",
-  textAlign: "center",
+  textAlign: "center" as const,
   color: "#60A5FA",
   textDecoration: "none",
   fontSize: 14,

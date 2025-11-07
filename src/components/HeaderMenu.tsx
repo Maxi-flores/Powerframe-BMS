@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, forwardRef, createContext, useContext } from "react";
+import React from "react";
 // src/components/HeaderMenu.tsx
 import { Bell, Search, User, ChevronDown, LogOut } from "lucide-react";
 
@@ -72,7 +72,7 @@ export default function HeaderMenu({ className, style, onSearch, notifications =
                 Profile
               </button>
               <button style={{ display: "flex", alignItems: "center", gap: 8, width: "100%", padding: "12px 16px", background: "none", border: "none", textAlign: "left", color: "#F8FAFC", cursor: "pointer", transition: "background 0.2s" }} onClick={() => console.log("Settings")}>
-                <LucideSettings size={16} />
+                <Settings size={16} />
                 Settings
               </button>
               <button style={{ display: "flex", alignItems: "center", gap: 8, width: "100%", padding: "12px 16px", background: "none", border: "none", textAlign: "left", color: "#EF4444", cursor: "pointer", transition: "background 0.2s" }} onClick={() => console.log("Logout")}>
@@ -85,4 +85,4 @@ export default function HeaderMenu({ className, style, onSearch, notifications =
       </div>
     </div>
   );
-}
+}import { Settings } from "lucide-react";

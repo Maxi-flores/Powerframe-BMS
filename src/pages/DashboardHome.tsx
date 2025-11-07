@@ -10,11 +10,11 @@ export default function DashboardLayoutHome() {
   return (
     <AppLayout>
       <DashboardLayoutHome
-        widget1={<WidgetCalendar />}
-        widget2={<WidgetRevenue />}
-        widget3={<WidgetAnalytics />}
-        widget4={<WidgetTaskStatus />}
-        widget5={<WidgetTimeline />}
+        
+        
+        
+        
+        
         // widget6–8: optional or empty
       />
     </AppLayout>

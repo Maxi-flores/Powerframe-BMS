@@ -1,3 +1,4 @@
+import React, { useState, useEffect, useRef, forwardRef, createContext, useContext } from "react";
 // src/components/DashboardLayoutTargets.tsx
 type DashboardLayoutTargetsProps = {
   className?: string;

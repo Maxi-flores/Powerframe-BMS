@@ -1,3 +1,4 @@
+import React, { useState, useEffect, useRef, forwardRef, createContext, useContext } from "react";
 // src/components/LoginBackground.tsx
 type LoginBackgroundProps = {
   className?: string;   // ← NEW: allow Plasmic to add classes

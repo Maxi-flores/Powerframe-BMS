@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, forwardRef, createContext, useContext } from "react";
+import React from "react";
 // src/components/MovingLoginBackground.tsx
 import { Renderer, Program, Mesh, Triangle, Vec2 } from 'ogl';
 import './DarkVeil.css';

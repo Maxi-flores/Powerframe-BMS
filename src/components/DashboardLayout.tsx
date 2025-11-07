@@ -1,3 +1,4 @@
+import React, { useState, useEffect, useRef, forwardRef, createContext, useContext } from "react";
 // src/components/DashboardLayout.tsx
 import MagicBento from "./MagicBento";
 
@@ -95,8 +96,8 @@ export default function DashboardLayout({
             
             
             
-            spotlightRadius={300}
-            particleCount={12}
+            
+            
             glowColor="132, 0, 255"
           />
         )}

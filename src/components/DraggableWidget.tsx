@@ -27,7 +27,7 @@ export default function DraggableWidget({ type, gridSize }: DraggableWidgetProps
   }));
 
   return (
-    <div ref={drag} style={{ opacity: isDragging ? 0.5 : 1 }} className="draggable-preview">
+    <div ref={drag as any} style={{ opacity: isDragging ? 0.5 : 1 }} className="draggable-preview">
       {previews[type]}
     </div>
   );

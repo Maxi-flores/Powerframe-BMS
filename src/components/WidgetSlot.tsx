@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, forwardRef, createContext, useContext } from "react";
+import React from "react";
 import { useDrop } from "react-dnd";
 import WidgetRenderer from "./widgets/WidgetRenderer";
 import { Widget } from "../types";

@@ -1,3 +1,4 @@
+import React, { useState, useEffect, useRef, forwardRef, createContext, useContext } from "react";
 // src/layouts/AppLayout.tsx
 import Sidebar from "@/components/Sidebar";
 import Header from "@/components/Header";
