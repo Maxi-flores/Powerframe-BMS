@@ -1,0 +1,315 @@
+/* src/components/widgets/WidgetRenderer.css */
+.widget-calendar {
+  font-family: Arial, Helvetica, sans-serif;
+  padding: 1.25rem;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background: #1E293B;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  user-select: none;
+}
+
+.cal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.25rem;
+  font-weight: 700;
+  font-size: 1.25rem;
+  color: #F8FAFC;
+}
+
+.cal-header button {
+  background: #334155;
+  border: none;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  font-size: 1.4rem;
+  cursor: pointer;
+  color: #E2E8F0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.25s ease;
+}
+
+.cal-header button:hover {
+  background: #475569;
+  transform: scale(1.1);
+  box-shadow: 0 0 15px rgba(14, 165, 233, 0.4);
+}
+
+.cal-header button:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.cal-weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  text-align: center;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #94A3B8;
+  margin-bottom: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.cal-days {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  grid-template-rows: repeat(5, 1fr);
+  gap: 8px;
+  flex: 1;
+  padding: 0.5rem 0;
+}
+
+.cal-day {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+}
+
+.cal-day.empty {
+  background: transparent;
+}
+
+.cal-day.active {
+  background: #334155;
+  color: #E2E8F0;
+}
+
+.cal-day.active:hover {
+  background: #475569;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+}
+
+.cal-day.today {
+  background: linear-gradient(135deg, #0EA5E9, #38BDF8) !important;
+  color: white !important;
+  font-weight: 800;
+  box-shadow: 0 0 30px rgba(14, 165, 233, 0.7);
+  transform: scale(1.08);
+  animation: pulse-today 2s infinite;
+  z-index: 10;
+}
+
+@keyframes pulse-today {
+  0%, 100% { box-shadow: 0 0 30px rgba(14, 165, 233, 0.7); }
+  50% { box-shadow: 0 0 45px rgba(14, 165, 233, 0.9); }
+}
+
+/* REVENUE CHART */
+.widget-revenue {
+  padding: 1.5rem;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.widget-revenue h3 {
+  margin: 0 0 1.25rem 0;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #F8FAFC;
+}
+
+.chart-placeholder {
+  display: flex;
+  align-items: flex-end;
+  gap: 1.25rem;
+  height: 160px;
+  margin: 1.5rem 0;
+  padding: 0 0.5rem;
+}
+
+.bar {
+  flex: 1;
+  background: linear-gradient(to top, #0EA5E9 0%, #38BDF8 100%);
+  border-radius: 12px 12px 0 0;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  color: white;
+  font-size: 0.85rem;
+  font-weight: 600;
+  padding-bottom: 8px;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.4s ease;
+  box-shadow: 0 4px 15px rgba(14, 165, 233, 0.3);
+}
+
+.bar::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 30%;
+  background: linear-gradient(to bottom, rgba(255,255,255,0.3), transparent);
+  border-radius: 12px 12px 0 0;
+}
+
+.bar:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 25px rgba(14, 165, 233, 0.5);
+}
+
+/* METRICS */
+.widget-metric {
+  padding: 1.5rem;
+  text-align: center;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.widget-metric h3 {
+  margin: 0 0 1rem 0;
+  font-size: 1.1rem;
+  color: #CBD5E1;
+  font-weight: 600;
+}
+
+.metric-value {
+  font-size: 3rem;
+  font-weight: 800;
+  color: #0EA5E9;
+  margin: 0.75rem 0;
+  letter-spacing: -1px;
+}
+
+/* KANBAN */
+.widget-kanban {
+  padding: 1rem;
+  height: 100%;
+  display: flex;
+  gap: 1rem;
+  overflow: hidden;
+}
+
+.widget-kanban h3 {
+  margin: 0 0 1rem 0;
+  font-size: 1.1rem;
+  color: #CBD5E1;
+  font-weight: 600;
+  padding: 0 1rem;
+}
+
+.kanban-columns {
+  display: flex;
+  gap: 1rem;
+  flex: 1;
+  overflow-x: auto;
+  padding-bottom: 0.5rem;
+}
+
+.column {
+  flex: 1;
+  min-width: 220px;
+  background: #334155;
+  border-radius: 16px;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.column h4 {
+  margin: 0 0 1rem 0;
+  font-size: 0.95rem;
+  color: #94A3B8;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.card {
+  background: #1E293B;
+  padding: 1rem;
+  border-radius: 12px;
+  margin-bottom: 0.75rem;
+  font-size: 0.9rem;
+  color: #E2E8F0;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  transition: all 0.25s ease;
+  cursor: grab;
+}
+
+.card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+  background: #334155;
+}
+
+.card:active {
+  cursor: grabbing;
+}
+
+/* TABLE */
+.widget-table {
+  padding: 1.5rem;
+  height: 100%;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.widget-table h3 {
+  margin: 0 0 1.25rem 0;
+  font-size: 1.1rem;
+  color: #CBD5E1;
+  font-weight: 600;
+}
+
+.widget-table table {
+  width: 100%;
+  font-size: 0.9rem;
+  border-collapse: collapse;
+}
+
+.widget-table td {
+  padding: 0.85rem 0;
+  border-bottom: 1px solid #334155;
+  color: #E2E8F0;
+}
+
+.widget-table tr:hover td {
+  color: #F8FAFC;
+  background: rgba(51, 65, 85, 0.3);
+}
+
+/* GENERAL TITLES */
+.widget-revenue h3,
+.widget-metric h3,
+.widget-kanban h3,
+.widget-table h3 {
+  margin: 0 0 1.25rem 0;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #F8FAFC;
+  letter-spacing: -0.3px;
+}
+
+/* EMPTY FALLBACK */
+.widget-empty {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #64748B;
+  font-size: 1.1rem;
+  font-style: italic;
+}

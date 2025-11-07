@@ -1,10 +1,6 @@
-import { PlasmicRootProvider, PlasmicComponent } from "@plasmicapp/loader-react";
-import { PLASMIC } from "./plasmic-init";
+// src/App.tsx (OPTIONAL – can be deleted if not used)
+import { useState, useRef, useEffect, forwardRef, createContext, useContext, StrictMode } from "react";
 
 export default function App() {
-  return (
-    <PlasmicRootProvider loader={PLASMIC}>
-      <PlasmicComponent component="TodoApp" />
-    </PlasmicRootProvider>
-  );
+  return null; // Not used — routing handled in main.tsx
 }

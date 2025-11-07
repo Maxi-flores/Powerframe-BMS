@@ -11,7 +11,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.36.0",
-    "@types/node": "^24.6.0",
+    "@types/node": "^24.9.2",
     "@types/react": "^19.1.16",
     "@types/react-dom": "^19.1.9",
     "@vitejs/plugin-react": "^5.0.4",
@@ -26,8 +26,16 @@
   "dependencies": {
     "@plasmicapp/loader-react": "^1.0.401",
     "@plasmicapp/loader-splits": "^1.0.65",
+    "@plasmicapp/react-web": "^0.2.405",
+    "date-fns": "^4.1.0",
+    "gsap": "^3.13.0",
+    "lucide-react": "^0.552.0",
+    "ogl": "^1.0.11",
     "react": "^18.2.0",
+    "react-dnd": "^16.0.1",
+    "react-dnd-html5-backend": "^16.0.1",
     "react-dom": "^18.2.0",
-    "react-router-dom": "^7.9.4"
+    "react-router-dom": "^7.9.5",
+    "zustand": "^5.0.3"
   }
 }

@@ -1,0 +1,1 @@
+export type WidgetType = "kanban" | "chart" | "metrics" | "tasks" | "calendar";

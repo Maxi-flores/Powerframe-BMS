@@ -1,0 +1,30 @@
+/* src/components/DraggableWidget.css */
+.draggable-widget {
+  display: block;
+  width: 85%;
+  height: 40px;
+  padding: 10px 14px;
+  background: #2d2d2d;
+  color: #e2e8f0;
+  border-radius: 12px;
+  font-size: 13px;
+  font-weight: 500;
+  text-align: center;
+  cursor: grab;
+  user-select: none;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  transition: all 0.2s ease;
+  opacity: 1;
+}
+
+.draggable-widget:hover {
+  background: #3d3d3d;
+}
+
+.draggable-widget.dragging {
+  opacity: 0.5;
+}
+
+.draggable-widget:active {
+  cursor: grabbing;
+}

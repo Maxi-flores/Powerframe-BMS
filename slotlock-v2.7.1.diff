@@ -1,0 +1,89 @@
+diff --git a/src/components/DashboardGrid.tsx b/src/components/DashboardGrid.tsx
+index 8f1a2c3..d4e9b12 100644
+--- a/src/components/DashboardGrid.tsx
++++ b/src/components/DashboardGrid.tsx
+@@ -1,6 +1,8 @@
+ import { useRef, useEffect, useState } from 'react';
+ import { motion } from 'framer-motion';
+ import { CalendarWidget } from '@/widgets/CalendarWidget';
++import { widgetLibrary } from '@/widgets/library';
++import { placeWidget } from '@/stores/dashboardStore';
+ 
+ const GRID_ROWS = 3;  // ← FIX #6
+ const GRID_COLS = 4;  // ← FIX #6
+@@ -28,6 +30,7 @@ export default function DashboardGrid() {
+               gridColumn: `span ${span.colSpan}`,
+               gridRow: `span ${span.rowSpan}`,
+             }}
++            onDragOver={(e) => e.preventDefault()}
+             onMouseEnter={() => setHoveredSlot(idx)}
+             onMouseLeave={() => setHoveredSlot(null)}
+             onDrop={(e) => {
+@@ -65,6 +68,7 @@ export default function DashboardGrid() {
+           </motion.div>
+         );
+       })}
++      <AddWidgetMenu />
+     </div>
+   );
+ }
+diff --git a/src/components/AddWidgetMenu.tsx b/src/components/AddWidgetMenu.tsx
+new file mode 100644
+index 0000000..a1b2f3d
+--- /dev/null
++++ b/src/components/AddWidgetMenu.tsx
+@@ -0,0 +1,62 @@
++import { motion } from 'framer-motion';
++import { widgetLibrary } from '@/widgets/library';
++import { useRef } from 'react';
++
++export function AddWidgetMenu() {
++  const scrollRef = useRef<HTMLDivElement>(null);
++
++  return (
++    <motion.div 
++      initial={{ scale: 0.8, opacity: 0 }}
++      animate={{ scale: 1, opacity: 1 }}
++      className="fixed bottom-8 right-8 z-50"
++    >
++      <button
++        onClick={() => document.getElementById('widget-modal')?.showModal()}
++        className="btn btn-circle btn-primary shadow-2xl hover:scale-110 transition-all
++                   w-24 h-24 text-5xl" // ← FIX #2: THICC AF
++      >
++        +
++      </button>
++
++      <dialog id="widget-modal" className="modal">
++        <div className="modal-box w-11/12 max-w-5xl h-[80vh]">
++          <form method="dialog">
++            <button className="btn btn-sm btn-circle absolute right-4 top-4">✕</button>
++          </form>
++          <h3 className="font-bold text-2xl mb-6">Widget Vault</h3>
++          
++          <div 
++            ref={scrollRef}
++            className="grid grid-cols-4 gap-6 overflow-y-auto h-full pb-20 pr-4
++                       scrollbar scrollbar-thumb-cyan-400 scrollbar-thin" // ← FIX #5
++          >
++            {widgetLibrary.map((widget) => (
++              <motion.div
++                key={widget.id}
++                draggable
++                onDragStart={(e) => {
++                  e.dataTransfer.setData('widget', JSON.stringify(widget));
++                }}
++                whileHover={{ scale: 1.05 }}
++                whileDrag={{ scale: 1.1 }}
++                className="card bg-base-100 shadow-xl cursor-move p-6 hover:ring-4 ring-cyan-400"
++              >
++                <widget.preview />
++                <div className="text-center mt-4 font-semibold">{widget.name}</div>
++              </motion.div>
++            ))}
++          </div>
++        </div>
++      </dialog>
++    </motion.div>
++  );
++}

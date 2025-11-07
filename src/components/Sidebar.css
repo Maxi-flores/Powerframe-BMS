@@ -1,0 +1,5 @@
+.app-sidebar,
+.sidebar-item,
+.sidebar-label {
+  font-family: var(--font-sidebar) !important;
+}

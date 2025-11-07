@@ -1,11 +1,42 @@
+/* src/index.css */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ── GOOGLE FONTS ─────────────────────────────────────────────────── */
+@import url('https://fonts.googleapis.com/css2?family=Michroma&display=swap');
+
+/* ── CUSTOM LOCAL FONTS (KEEP IF USED IN WIDGETS) ─────────────────── */
+@font-face {
+  font-family: 'Rounded Elegance';
+  src: url('/fonts/Rounded Elegance Regular.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Simpletype';
+  src: url('/fonts/Simpletype.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* ── GLOBAL ROOT ─────────────────────────────────────────────────── */
 :root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  --font-header: Arial, Helvetica, sans-serif;
+  --font-sidebar: 'Michroma', sans-serif;
+  --font-body: 'Simpletype', system-ui, sans-serif;
+  --font-title: 'Rounded Elegance', cursive;
+
+  font-family: var(--font-body);
   line-height: 1.5;
   font-weight: 400;
 
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+  color-scheme: dark;
+  color: #F8FAFC;
+  background-color: #0F172A;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -13,56 +44,84 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* ── FORCE DARK MODE ONLY ─────────────────────────────────────────── */
+html, body, #root {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  background: #0F172A;
+  color: #F8FAFC;
+}
+
+/* ── BODY LAYOUT ─────────────────────────────────────────────────── */
+body {
+  display: flex;
+  min-width: 320px;
+  font-family: var(--font-body);
+  overflow: hidden; /* Prevent scrollbars */
+}
+
+/* ── FONT CLASSES ─────────────────────────────────────────────────── */
+.font-header   { font-family: var(--font-header); }
+.font-sidebar  { font-family: var(--font-sidebar); }
+.font-title    { font-family: var(--font-title); }
+
+/* ── HEADINGS ────────────────────────────────────────────────────── */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-title);
+  font-weight: normal;
+  margin: 0;
+}
+
+/* ── PAGE TITLE ──────────────────────────────────────────────────── */
+.page-title {
+  font-family: var(--font-title);
+  font-size: 1.8rem;
+  color: #F8FAFC;
+  letter-spacing: 0.5px;
+}
+
+/* ── LINKS ───────────────────────────────────────────────────────── */
 a {
   font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
+  color: #0EA5E9;
+  text-decoration: none;
+  transition: color 0.2s ease;
 }
 a:hover {
-  color: #535bf2;
+  color: #38BDF8;
 }
 
-body {
-  margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
-}
-
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
-}
-
+/* ── BUTTONS ─────────────────────────────────────────────────────── */
 button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
+  font-family: var(--font-body);
+  border-radius: 12px;
+  border: none;
+  padding: 0.75rem 1.5rem;
   font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
+  background: #1E293B;
+  color: #E2E8F0;
   cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
+button:hover {
+  background: #334155;
+  transform: translateY(-2px);
+}
+
+button:active {
+  transform: translateY(0);
+}
+
+/* ── DISABLE LIGHT MODE ──────────────────────────────────────────── */
 @media (prefers-color-scheme: light) {
   :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
+    color: #F8FAFC !important;
+    background-color: #0F172A !important;
   }
   button {
-    background-color: #f9f9f9;
+    background-color: #1E293B !important;
   }
 }
