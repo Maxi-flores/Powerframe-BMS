@@ -38,9 +38,14 @@ const updateCardGlowProperties = (card: HTMLElement, mouseX: number, mouseY: num
   const rect = card.getBoundingClientRect();
   const relativeX = ((mouseX - rect.left) / rect.width) * 100;
   const relativeY = ((mouseY - rect.top) / rect.height) * 100;
-  cards.forEach(card => (card as HTMLElement).style.setProperty('--glow-x', `${relativeX}%`);
-  cards.forEach(card => (card as HTMLElement).style.setProperty('--glow-y', `${relativeY}%`);
   cards.forEach(card => (card as HTMLElement).style.setProperty('--glow-intensity', glow.toString());
+    cards.forEach(card => (card as HTMLElement).style.setProperty('--glow-x', `${relativeX}%`));
+    cards.forEach(card => (card as HTMLElement).style.setProperty('--glow-y', `${relativeY}%`));
+    cards.forEach(card => (card as HTMLElement).style.setProperty('--glow-intensity', glow.toString()));
+    cards.forEach(card => (card as HTMLElement).style.setProperty('--glow-radius', `${radius}px`));
+    cards.forEach(card => (card as HTMLElement).style.setProperty('--glow-intensity', '0'));
+  cards.forEach(card => (card as HTMLElement).style.setProperty('--glow-intensity', glow.toString());
+  cards.forEach(card => (card as HTMLElement).style.setProperty('--glow-radius', `${radius}px`);
   cards.forEach(card => (card as HTMLElement).style.setProperty('--glow-radius', `${radius}px`);
 };
 
@@ -278,10 +283,15 @@ const GlobalSpotlight: React.FC<{
       const section = gridRef.current.closest('.dashboard-layout-home');
       const rect = section?.getBoundingClientRect();
       const mouseInside = rect && e.clientX >= rect.left && e.clientX <= rect.right && e.clientY >= rect.top && e.clientY <= rect.bottom;
-
+    cards.forEach(card => (card as HTMLElement).style.setProperty('--glow-x', `${relativeX}%`));
+    cards.forEach(card => (card as HTMLElement).style.setProperty('--glow-y', `${relativeY}%`));
+    cards.forEach(card => (card as HTMLElement).style.setProperty('--glow-intensity', glow.toString()));
+    cards.forEach(card => (card as HTMLElement).style.setProperty('--glow-radius', `${radius}px`));
+    cards.forEach(card => (card as HTMLElement).style.setProperty('--glow-intensity', '0'));
       const cards = gridRef.current.querySelectorAll('.magic-bento-card');
       if (!mouseInside) {
         gsap.to(spotlightRef.current, { opacity: 0, duration: 0.3, ease: 'power2.out' });
+        cards.forEach(card => (card as HTMLElement).style.setProperty('--glow-intensity', '0');
         cards.forEach(card => (card as HTMLElement).style.setProperty('--glow-intensity', '0');
         return;
       }
