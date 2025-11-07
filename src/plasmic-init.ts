@@ -26,7 +26,7 @@ import MetricCard from "@/components/MetricCard";
 import BottomMetricCard from "@/components/BottomMetricCard";
 
 // ── ANIMATED HERO ─────────────────────────────────────────────────────
-import MagicBento from "@/components/MagicBento";
+
 
 // ── ORIGINAL DASHBOARD WIDGETS (8) ────────────────────────────────────
 import WidgetCalendar from "@/components/WidgetCalendar";

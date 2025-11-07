@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useState, useEffect, useRef, forwardRef, createContext, useContext } from "react";
 import { useDrop } from "react-dnd";
-import WidgetRenderer from "./widgets/WidgetRenderer";
+import WidgetRenderer from "./Widgets/WidgetRenderer";
 import { Widget } from "../types";
 
 interface WidgetSlotProps {

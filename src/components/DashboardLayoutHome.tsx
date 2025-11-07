@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect, useRef, forwardRef, createContext, useContext } from "react";
 // src/components/DashboardLayoutHome.tsx
 import { useDrop } from "react-dnd";
 import WidgetSlot from "./WidgetSlot";
@@ -74,7 +74,7 @@ export default function DashboardLayoutHome({ className }: DashboardLayoutHomePr
       <div className="dashboard-bg" />
 
       {/* 3×4 FIXED GRID WITH MERGE SUPPORT */}
-      <div className="dashboard-grid">
+      <div35 className="dashboard-grid" style={{position: "relative"}}>
         {WIDGET_SLOTS.map((slot) => (
           <WidgetSlot
             key={slot.id}

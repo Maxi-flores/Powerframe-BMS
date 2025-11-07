@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, forwardRef, createContext, useContext } from "react";
 // src/components/DashboardLayout.tsx
-import MagicBento from "./MagicBento";
+
 
 interface DashboardLayoutProps {
   className?: string;

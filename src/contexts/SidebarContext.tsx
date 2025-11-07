@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect, useRef, forwardRef, createContext, useContext } from "react";
 // src/contexts/SidebarContext.tsx
 type SidebarContextType = {
   isExpanded: boolean;

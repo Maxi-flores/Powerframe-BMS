@@ -1,4 +1,4 @@
-// src/components/widgets/WidgetRenderer.tsx
+// src/components/Widgets/WidgetRenderer.tsx
 import { format, startOfMonth, endOfMonth, eachDayOfInterval, getDay } from "date-fns";
 import "./WidgetRenderer.css";
 
