@@ -1,3 +1,4 @@
+import React, { useState, useEffect, useRef, forwardRef, createContext, useContext } from "react";
 // src/components/Sidebar.tsx
 import { useLocation } from "react-router-dom";
 

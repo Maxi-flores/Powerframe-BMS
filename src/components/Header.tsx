@@ -1,3 +1,4 @@
+import React, { useState, useEffect, useRef, forwardRef, createContext, useContext } from "react";
 // src/components/Header.tsx
 type HeaderProps = {
   pageName?: React.ReactNode; // ← SLOT for page title

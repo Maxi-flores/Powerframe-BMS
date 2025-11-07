@@ -1,3 +1,4 @@
+import React, { useState, useEffect, useRef, forwardRef, createContext, useContext } from "react";
 // src/components/WidgetCalendar.tsx  (COLLAPSIBLE + 6 WEEKS + HORIZONTAL EXPAND)
 import "./WidgetCalendar.css";
 

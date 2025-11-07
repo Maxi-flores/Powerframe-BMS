@@ -1,3 +1,4 @@
+import React, { useState, useEffect, useRef, forwardRef, createContext, useContext } from "react";
 // src/components/DashboardLayoutHome.tsx
 import { useDrop } from "react-dnd";
 import WidgetSlot from "./WidgetSlot";
@@ -23,10 +24,10 @@ const WIDGET_PALETTE: WidgetType[] = [
   "metrics",
   "tasks",
   "calendar",
-  "revenue",
-  "timeline",
-  "notifications",
-  "active-projects",
+  "revenue" as WidgetType,
+  "timeline" as WidgetType,
+  "notifications" as WidgetType,
+  "active-projects" as WidgetType,
 ];
 
 interface DashboardLayoutHomeProps {
@@ -116,7 +117,7 @@ export default function DashboardLayoutHome({ className }: DashboardLayoutHomePr
                   type={type}
                   gridSize={
                     type === "calendar" || type === "kanban" ? { w: 2, h: 2 } :
-                    type === "revenue" ? { w: 3, h: 2 } : { w: 1, h: 1 }
+                    type === "revenue" as WidgetType ? { w: 3, h: 2 } : { w: 1, h: 1 }
                   }
                 />
               ))}

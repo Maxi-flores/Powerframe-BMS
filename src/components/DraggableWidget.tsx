@@ -8,16 +8,16 @@ interface DraggableWidgetProps {
 }
 
 const previews: Record<WidgetType, string> = {
-  kanban: "📋 Kanban Board",
-  chart: "📊 Analytics Chart",
-  metrics: "📈 Key Metrics",
-  tasks: "✅ Task List",
-  calendar: "📅 Full Calendar",
-  revenue: "💰 Revenue XL",
-  timeline: "⏰ Project Timeline",
-  notifications: "🔔 Notifications",
-  "active-projects": "🚀 Active Projects",
-};
+  "kanban": "📋 Kanban",
+  "chart": "📊 Chart",
+  "metrics": "📈 Metrics",
+  "tasks": "✅ Tasks",
+  "calendar": "📅 Calendar",
+  "revenue": "💰 Revenue XL",
+  "timeline": "⏰ Timeline",
+  "notifications": "🔔 Notifications",
+  "active-projects": "🚀 Projects",
+} as const;
 
 export default function DraggableWidget({ type, gridSize }: DraggableWidgetProps) {
   const [{ isDragging }, drag] = useDrag(() => ({
@@ -27,8 +27,8 @@ export default function DraggableWidget({ type, gridSize }: DraggableWidgetProps
   }));
 
   return (
-    <div ref={drag} className="draggable-widget-preview" style={{ opacity: isDragging ? 0.5 : 1 }}>
-      {previews[type] || type}
+    <div ref={drag} style={{ opacity: isDragging ? 0.5 : 1 }} className="draggable-preview">
+      {previews[type]}
     </div>
   );
 }
