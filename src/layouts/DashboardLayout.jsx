@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Outlet, useNavigate, useLocation } from "react-router-dom";
 import { useProjects } from "../context/ProjectContext.jsx";
 import { useTheme } from "../context/ThemeContext.jsx";
+import Copilot from "../components/Copilot.jsx";
 
 export default function DashboardLayout() {
   const navigate = useNavigate();
@@ -12,27 +13,28 @@ export default function DashboardLayout() {
   const [sidebarExpanded, setSidebarExpanded] = useState(false);
   const [showProjectSwitcher, setShowProjectSwitcher] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
+  const [showCopilot, setShowCopilot] = useState(false);
   const [search, setSearch] = useState("");
 
   const navItems = [
-    { key: "Dashboard", path: "/dashboard", icon: Icons.home },
-    { key: "Out", path: "/dashboard/out", icon: Icons.send },
-    { key: "Tasks", path: "/dashboard/tasks", icon: Icons.checklist },
-    { key: "Plans", path: "/dashboard/plans", icon: Icons.calendar },
-    { key: "Web search", path: "/dashboard/search", icon: Icons.search },
-    { key: "Projects", path: "/dashboard/projects", icon: Icons.folder },
-    { key: "Bestanden", path: "/dashboard/files", icon: Icons.archive },
-    { key: "Info", path: "/dashboard/info", icon: Icons.info },
+    { key: "Dashboard", path: "/bms", icon: Icons.home },
+    { key: "Out", path: "/bms/out", icon: Icons.send },
+    { key: "Tasks", path: "/bms/tasks", icon: Icons.checklist },
+    { key: "Plans", path: "/bms/plans", icon: Icons.calendar },
+    { key: "Web search", path: "/bms/search", icon: Icons.search },
+    { key: "Projects", path: "/bms/projects", icon: Icons.folder },
+    { key: "Bestanden", path: "/bms/files", icon: Icons.archive },
+    { key: "Info", path: "/bms/info", icon: Icons.info },
   ];
 
   const currentPath = location.pathname;
   const activeKey = navItems.find(item =>
-    item.path === currentPath || (item.path !== "/dashboard" && currentPath.startsWith(item.path))
+    item.path === currentPath || (item.path !== "/bms" && currentPath.startsWith(item.path))
   )?.key || "Dashboard";
 
   function handleLogout() {
     localStorage.removeItem("token");
-    navigate("/login");
+    navigate("/bms-login");
   }
 
   // Close menu when clicking outside
@@ -105,7 +107,7 @@ export default function DashboardLayout() {
                 ))}
                 <button
                   className="project-switch-btn add"
-                  onClick={() => { navigate("/dashboard/projects"); setShowProjectSwitcher(false); }}
+                  onClick={() => { navigate("/bms/projects"); setShowProjectSwitcher(false); }}
                 >
                   + New Project
                 </button>
@@ -146,7 +148,7 @@ export default function DashboardLayout() {
           </div>
 
           {/* FAB */}
-          <button className="bms-fab" onClick={() => navigate("/dashboard/projects")} title="New Project">
+          <button className="bms-fab" onClick={() => navigate("/bms/projects")} title="New Project">
             <span className="bms-fab-plus">+</span>
           </button>
         </aside>
@@ -176,10 +178,10 @@ export default function DashboardLayout() {
             </div>
 
             <div className="bms-topbar-right">
-              <button className="bms-topbar-btn" title="Notifications" onClick={() => navigate("/dashboard/notifications")}>
+              <button className="bms-topbar-btn" title="Notifications" onClick={() => navigate("/bms/notifications")}>
                 {Icons.bell}
               </button>
-              <button className="bms-topbar-btn" title="Profile" onClick={() => navigate("/dashboard/profile")}>
+              <button className="bms-topbar-btn" title="Profile" onClick={() => navigate("/bms/profile")}>
                 {Icons.user}
               </button>
 
@@ -194,13 +196,13 @@ export default function DashboardLayout() {
                 </button>
                 {showMenu && (
                   <div className="menu-dropdown">
-                    <button onClick={() => { navigate("/dashboard/profile"); setShowMenu(false); }}>
+                    <button onClick={() => { navigate("/bms/profile"); setShowMenu(false); }}>
                       {Icons.user} <span>Profile</span>
                     </button>
-                    <button onClick={() => { navigate("/dashboard/settings"); setShowMenu(false); }}>
+                    <button onClick={() => { navigate("/bms/settings"); setShowMenu(false); }}>
                       {Icons.settings} <span>Settings</span>
                     </button>
-                    <button onClick={() => { navigate("/dashboard/management"); setShowMenu(false); }}>
+                    <button onClick={() => { navigate("/bms/management"); setShowMenu(false); }}>
                       {Icons.management} <span>Management</span>
                     </button>
                     <div className="menu-divider" />
@@ -211,7 +213,11 @@ export default function DashboardLayout() {
                 )}
               </div>
 
-              <button className="bms-topbar-ai" title="AI Assistant">
+              <button
+                className={`bms-topbar-ai ${showCopilot ? "active" : ""}`}
+                title="AI Copilot"
+                onClick={() => setShowCopilot(!showCopilot)}
+              >
                 {Icons.ai}
               </button>
             </div>
@@ -231,6 +237,9 @@ export default function DashboardLayout() {
           </footer>
         </main>
       </div>
+
+      {/* AI Copilot */}
+      <Copilot isOpen={showCopilot} onClose={() => setShowCopilot(false)} />
     </div>
   );
 }
@@ -802,6 +811,19 @@ const CSS = `
     align-items: center;
     justify-content: center;
     cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .bms-topbar-ai:hover {
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.3), rgba(139, 92, 246, 0.3));
+    border-color: rgba(99, 102, 241, 0.5);
+    transform: scale(1.05);
+  }
+
+  .bms-topbar-ai.active {
+    background: linear-gradient(135deg, #6366f1, #8b5cf6);
+    border-color: transparent;
+    box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
   }
 
   /* Content */

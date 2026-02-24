@@ -1,0 +1,42 @@
+# FIX: React Router + Vite Subpath Routing for `/BMS` Deployment
+
+## Context
+React + Vite SPA in `apps/shell`. Deployed at `https://powerframe.online/BMS`.
+Routing after login is broken in production due to basename/base misalignment.
+
+## Root Cause
+Vite serves assets assuming `/` as root. React Router navigates as if hosted at `/`.
+In production at `/BMS`, both assumptions are wrong — refreshing any nested route returns 404,
+and navigation links point to wrong paths.
+
+## Fix (minimal, no styling or folder changes)
+
+**1. `apps/shell/vite.config.ts`**
+Set `base` conditionally so dev stays at `/`:
+```ts
+base: process.env.NODE_ENV === 'production' ? '/BMS/' : '/',
+```
+
+**2. React Router — use `import.meta.env.BASE_URL` as basename**
+Find the router (likely `main.tsx` or `App.tsx`) and set:
+```tsx
+<BrowserRouter basename={import.meta.env.BASE_URL}>
+```
+`BASE_URL` is injected by Vite from the `base` config — this keeps dev and prod in sync automatically.
+
+**3. Login redirect — verify target route exists**
+Ensure the post-login `navigate()` call targets a route defined in your router, e.g.:
+```ts
+navigate('/dashboard') // not '/' or an undefined route
+```
+
+**4. Nested route refresh (server-side)**
+The server/CDN must rewrite all requests under `/BMS/*` to `/BMS/index.html`.
+For Nginx: `try_files $uri $uri/ /BMS/index.html;`
+For AWS CloudFront: add a custom error rule → 404 → `/BMS/index.html` → 200.
+
+## Constraints
+- No styling changes
+- No folder restructuring  
+- Touch only: `vite.config.ts`, router root component, server rewrite config
+- Explain what was wrong before making each change
