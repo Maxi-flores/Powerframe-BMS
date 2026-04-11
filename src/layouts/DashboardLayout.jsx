@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Outlet, useNavigate, useLocation } from "react-router-dom";
 import { useProjects } from "../context/ProjectContext.jsx";
 import { useTheme } from "../context/ThemeContext.jsx";
+import { useWorkState } from "../context/WorkStateContext.jsx";
 import Copilot from "../components/Copilot.jsx";
 
 export default function DashboardLayout() {
@@ -9,6 +10,7 @@ export default function DashboardLayout() {
   const location = useLocation();
   const { activeProject, projects, switchProject } = useProjects();
   const { currentTheme } = useTheme();
+  const { workState, workStateConfig, healthScore } = useWorkState();
 
   const [sidebarExpanded, setSidebarExpanded] = useState(false);
   const [showProjectSwitcher, setShowProjectSwitcher] = useState(false);
@@ -21,6 +23,7 @@ export default function DashboardLayout() {
     { key: "Out", path: "/bms/out", icon: Icons.send },
     { key: "Tasks", path: "/bms/tasks", icon: Icons.checklist },
     { key: "Plans", path: "/bms/plans", icon: Icons.calendar },
+    { key: "Workflow", path: "/bms/workstate", icon: Icons.workflow },
     { key: "Web search", path: "/bms/search", icon: Icons.search },
     { key: "Projects", path: "/bms/projects", icon: Icons.folder },
     { key: "Bestanden", path: "/bms/files", icon: Icons.archive },
@@ -114,15 +117,37 @@ export default function DashboardLayout() {
               </div>
             )}
 
-            {/* Progress */}
+            {/* Health Score & WorkState */}
             <div className="bms-version">
               <div className="bms-version-row">
-                <span className="bms-version-label">V1</span>
-                <span className="bms-version-val">58%</span>
+                <span className="bms-version-label">Health</span>
+                <span
+                  className="bms-version-val"
+                  style={{
+                    color: healthScore >= 90 ? "#22c55e" : healthScore >= 60 ? "#f59e0b" : "#ef4444",
+                  }}
+                >
+                  {healthScore}%
+                </span>
               </div>
               <div className="bms-progress">
-                <div className="bms-progress-fill" style={{ width: "58%" }} />
+                <div
+                  className="bms-progress-fill"
+                  style={{
+                    width: `${healthScore}%`,
+                    background: healthScore >= 90 ? "#22c55e" : healthScore >= 60 ? "#f59e0b" : "#ef4444",
+                  }}
+                />
               </div>
+              {sidebarExpanded && (
+                <button
+                  className="bms-workstate-pill"
+                  style={{ background: workStateConfig.color + "22", color: workStateConfig.color, borderColor: workStateConfig.color + "55" }}
+                  onClick={() => navigate("/bms/workstate")}
+                >
+                  {workStateConfig.icon} {workStateConfig.label}
+                </button>
+              )}
             </div>
 
             {/* Navigation */}
@@ -178,6 +203,19 @@ export default function DashboardLayout() {
             </div>
 
             <div className="bms-topbar-right">
+              {/* Health Score chip */}
+              <button
+                className="bms-health-chip"
+                title="Workflow Orchestrator"
+                onClick={() => navigate("/bms/workstate")}
+                style={{
+                  color: healthScore >= 90 ? "#22c55e" : healthScore >= 60 ? "#f59e0b" : "#ef4444",
+                  borderColor: (healthScore >= 90 ? "#22c55e" : healthScore >= 60 ? "#f59e0b" : "#ef4444") + "44",
+                }}
+              >
+                <span>{workStateConfig.icon}</span>
+                <span>{healthScore}</span>
+              </button>
               <button className="bms-topbar-btn" title="Notifications" onClick={() => navigate("/bms/notifications")}>
                 {Icons.bell}
               </button>
@@ -204,6 +242,9 @@ export default function DashboardLayout() {
                     </button>
                     <button onClick={() => { navigate("/bms/management"); setShowMenu(false); }}>
                       {Icons.management} <span>Management</span>
+                    </button>
+                    <button onClick={() => { navigate("/bms/workstate"); setShowMenu(false); }}>
+                      {Icons.workflow} <span>Workflow Orchestrator</span>
                     </button>
                     <div className="menu-divider" />
                     <button className="danger" onClick={handleLogout}>
@@ -346,6 +387,15 @@ const Icons = {
     <svg viewBox="0 0 24 24" width="18" height="18" fill="none">
       <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
       <path d="M16 17l5-5-5-5M21 12H9" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  ),
+  workflow: (
+    <svg viewBox="0 0 24 24" width="18" height="18" fill="none">
+      <circle cx="5" cy="6" r="2" stroke="currentColor" strokeWidth="1.8" />
+      <circle cx="19" cy="6" r="2" stroke="currentColor" strokeWidth="1.8" />
+      <circle cx="5" cy="18" r="2" stroke="currentColor" strokeWidth="1.8" />
+      <circle cx="19" cy="18" r="2" stroke="currentColor" strokeWidth="1.8" />
+      <path d="M7 6h10M7 18h10M5 8v8M19 8v8" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
     </svg>
   ),
   ai: (
@@ -872,4 +922,42 @@ const CSS = `
     .bms-sidebar { display: none; }
     .bms-topbar { border-radius: 14px; padding: 0 10px; }
   }
+
+  /* WorkState pill in sidebar */
+  .bms-workstate-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 8px;
+    padding: 5px 10px;
+    border-radius: 20px;
+    border: 1px solid;
+    font-size: 11px;
+    font-weight: 600;
+    cursor: pointer;
+    background: transparent;
+    transition: opacity 0.15s;
+    width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .bms-workstate-pill:hover { opacity: 0.75; }
+
+  /* Health Score chip in topbar */
+  .bms-health-chip {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 6px 12px;
+    border-radius: 20px;
+    border: 1px solid;
+    background: transparent;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: opacity 0.15s;
+  }
+  .bms-health-chip:hover { opacity: 0.75; }
 `;
