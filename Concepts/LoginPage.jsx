@@ -1,38 +1,52 @@
+// Canonical Powerframe Login Page
+// This is the reference design for Firebase-based authentication
+// Import this or adapt it based on your auth context setup
+
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext.jsx";
+import Aurora from "../components/Aurora.jsx";
 
-export default function Login() {
+export default function LoginPage() {
   const navigate = useNavigate();
-  const [username, setUsername] = useState("");
+  const { login, loginWithGoogle } = useAuth();
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
   async function handleLogin(e) {
     e.preventDefault();
     setError("");
+    setLoading(true);
 
     try {
-      const res = await fetch("/api/auth/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username, password }),
-      });
-
-      const data = await res.json();
-
-      if (res.ok) {
-        localStorage.setItem("token", data.token);
-        navigate("/bms");
-      } else {
-        setError(data.message || "Login failed");
-      }
+      await login(email, password);
+      navigate("/bms");
     } catch (err) {
-      setError("Server error. Please try again.");
+      setError(err.message || "Login failed");
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  async function handleGoogleLogin() {
+    setError("");
+    setLoading(true);
+
+    try {
+      await loginWithGoogle();
+      navigate("/bms");
+    } catch (err) {
+      setError(err.message || "Google login failed");
+    } finally {
+      setLoading(false);
     }
   }
 
   return (
     <div className="login-root">
+      <Aurora />
       <style>{loginCSS}</style>
 
       <div className="login-card">
@@ -42,27 +56,35 @@ export default function Login() {
         </div>
 
         <form onSubmit={handleLogin}>
-          <label>Username or email address</label>
+          <label>Email address</label>
           <input
-            type="text"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+            placeholder="you@example.com"
           />
 
           <div className="password-row">
             <label>Password</label>
-            <span className="forgot">Forgot password?</span>
+            <span
+              className="forgot"
+              onClick={() => navigate("/reset-password")}
+            >
+              Forgot password?
+            </span>
           </div>
           <input
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            required
           />
 
           {error && <div className="error-msg">{error}</div>}
 
-          <button type="submit" className="btn-primary">
-            Sign in
+          <button type="submit" className="btn-primary" disabled={loading}>
+            {loading ? "Signing in..." : "Sign in"}
           </button>
         </form>
 
@@ -72,11 +94,16 @@ export default function Login() {
           <span />
         </div>
 
-        <button className="btn-oauth google">
+        <button
+          type="button"
+          className="btn-oauth google"
+          onClick={handleGoogleLogin}
+          disabled={loading}
+        >
           <span>G</span> Continue with Google
         </button>
 
-        <button className="btn-oauth apple">
+        <button type="button" className="btn-oauth apple" disabled>
           <span></span> Continue with Apple
         </button>
 
@@ -90,15 +117,18 @@ export default function Login() {
 
 const loginCSS = `
 .login-root {
+  position: relative;
   height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
-  background: linear-gradient(90deg, #1c0066, #7a00cc);
   font-family: sans-serif;
+  z-index: 1;
 }
 
 .login-card {
+  position: relative;
+  z-index: 2;
   width: 400px;
   padding: 40px;
   border-radius: 30px;
@@ -154,6 +184,11 @@ input {
   font-size: 12px;
   color: #8ab4ff;
   cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.forgot:hover {
+  opacity: 0.8;
 }
 
 .btn-primary {
@@ -165,6 +200,16 @@ input {
   font-weight: bold;
   cursor: pointer;
   margin-bottom: 20px;
+  transition: opacity 0.2s;
+}
+
+.btn-primary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.btn-primary:hover:not(:disabled) {
+  opacity: 0.9;
 }
 
 .error-msg {
@@ -198,6 +243,16 @@ input {
   margin-bottom: 15px;
   cursor: pointer;
   font-weight: bold;
+  transition: opacity 0.2s;
+}
+
+.btn-oauth:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn-oauth:hover:not(:disabled) {
+  opacity: 0.9;
 }
 
 .google {
