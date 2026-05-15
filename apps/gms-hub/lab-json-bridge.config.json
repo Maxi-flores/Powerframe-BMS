@@ -1,0 +1,58 @@
+{
+  "meta": {
+    "project": "GMS Master Hub",
+    "scope": "GMS Master Hub layout shell",
+    "owner": "GMS",
+    "version": "1.0.0"
+  },
+  "routing_boundaries": {
+    "public_routes": ["/gms-login"],
+    "protected_root": "/gms",
+    "namespaces": {
+      "wms": "/gms/wms",
+      "crm": "/gms/crm",
+      "tpr": "/gms/tpr"
+    }
+  },
+  "authentication_discipline": {
+    "session_validation": "strict",
+    "unauthenticated_redirect": "/gms-login",
+    "public_shell_isolation": true,
+    "prevent_navigation_leakage": true
+  },
+  "bridge_lab_specification": {
+    "mount_path": "/bridge-lab",
+    "allowed_origins": [
+      "https://gms-master-hub.vercel.app",
+      "https://gms-master-hub-*.vercel.app",
+      "http://localhost:5173"
+    ],
+    "ingress_contracts": {
+      "BridgeEventRequest": {
+        "required": ["eventType", "payload", "timestamp", "source"],
+        "event_types": {
+          "inventory.sync": {
+            "payload_required": ["inventoryId", "items"],
+            "payload_shape": {
+              "inventoryId": "string",
+              "items": "array"
+            }
+          },
+          "cadence.calibrate": {
+            "payload_required": ["cadenceId", "target"],
+            "payload_shape": {
+              "cadenceId": "string",
+              "target": ["string", "number"]
+            }
+          }
+        }
+      }
+    }
+  },
+  "interceptor_rules": {
+    "strategy": "activeCandidate",
+    "transport": "window.postMessage",
+    "persistence": "memory-only",
+    "storage": "none"
+  }
+}
