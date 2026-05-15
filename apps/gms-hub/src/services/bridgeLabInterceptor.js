@@ -23,6 +23,11 @@ const canStructuredClone = typeof structuredClone === 'function'
 const cryptoRef = typeof crypto !== 'undefined' ? crypto : null
 const hasRandomUuid = !!(cryptoRef && typeof cryptoRef.randomUUID === 'function')
 const hasRandomValues = !!(cryptoRef && typeof cryptoRef.getRandomValues === 'function')
+const uuidVersionMask = 0x0f
+const uuidVersionValue = 0x40
+const uuidVariantMask = 0x3f
+const uuidVariantValue = 0x80
+const maxFallbackCounter = 1000000
 
 const escapeRegExp = (value) =>
   value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
@@ -46,7 +51,7 @@ const buildWildcardMatcher = (pattern) => {
   const hostRegexSource = parsed.hostname
     .split(wildcardToken)
     .map(escapeRegExp)
-    .join('[a-zA-Z0-9-]+')
+    .join('[a-zA-Z0-9-]{1,63}')
 
   return {
     protocol: parsed.protocol,
@@ -91,12 +96,15 @@ const isOriginAllowed = (origin) => {
 const isPlainObject = (value) =>
   typeof value === 'object' && value !== null && !Array.isArray(value)
 
+const isNonEmptyString = (value) =>
+  typeof value === 'string' && value.trim().length > 0
+
 const isValidTimestamp = (value) => {
   if (typeof value === 'number' && Number.isFinite(value)) {
     return true
   }
 
-  if (typeof value === 'string' && value.trim().length > 0) {
+  if (isNonEmptyString(value)) {
     return !Number.isNaN(Date.parse(value))
   }
 
@@ -117,7 +125,7 @@ const matchesType = (value, expected) => {
   }
 
   if (expected === 'string') {
-    return typeof value === 'string' && value.trim().length > 0
+    return isNonEmptyString(value)
   }
 
   if (expected === 'object') {
@@ -170,7 +178,7 @@ const isValidBridgeEventRequest = (candidate) => {
     return false
   }
 
-  if (typeof candidate.source !== 'string' || candidate.source.trim().length === 0) {
+  if (!isNonEmptyString(candidate.source)) {
     return false
   }
 
@@ -211,10 +219,6 @@ const generateEventId = () => {
   if (hasRandomValues) {
     const bytes = new Uint8Array(16)
     cryptoRef.getRandomValues(bytes)
-    const uuidVersionMask = 0x0f
-    const uuidVersionValue = 0x40
-    const uuidVariantMask = 0x3f
-    const uuidVariantValue = 0x80
     bytes[6] = (bytes[6] & uuidVersionMask) | uuidVersionValue
     bytes[8] = (bytes[8] & uuidVariantMask) | uuidVariantValue
     const toHex = (value) => value.toString(16).padStart(2, '0')
@@ -228,7 +232,7 @@ const generateEventId = () => {
     return segments.map((segment) => [...segment].map(toHex).join('')).join('-')
   }
 
-  fallbackCounter = (fallbackCounter + 1) % 1000000
+  fallbackCounter = (fallbackCounter + 1) % maxFallbackCounter
   return `bridge-${Date.now()}-${fallbackCounter}`
 }
 
