@@ -28,6 +28,8 @@ const uuidVersionValue = 0x40
 const uuidVariantMask = 0x3f
 const uuidVariantValue = 0x80
 const maxFallbackCounter = 1000000
+const wildcardSegmentPattern =
+  '[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?'
 
 const escapeRegExp = (value) =>
   value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
@@ -51,7 +53,7 @@ const buildWildcardMatcher = (pattern) => {
   const hostRegexSource = parsed.hostname
     .split(wildcardToken)
     .map(escapeRegExp)
-    .join('[a-zA-Z0-9-]{1,63}')
+    .join(wildcardSegmentPattern)
 
   return {
     protocol: parsed.protocol,
@@ -148,6 +150,10 @@ const hasRequiredPayloadFields = (eventType, payload) => {
     ? eventTypeRules[eventType].payload_shape
     : {}
 
+  if (!payloadRequired.every((key) => key in payloadShape)) {
+    return false
+  }
+
   return Object.entries(payloadShape).every(
     ([key, typeSpec]) => key in payload && matchesType(payload[key], typeSpec),
   )
@@ -191,7 +197,7 @@ const deepCloneFallback = (value) => {
   }
 
   if (value instanceof Date) {
-    return value.toISOString()
+    return new Date(value.getTime())
   }
 
   if (isPlainObject(value)) {
