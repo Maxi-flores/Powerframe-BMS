@@ -1,6 +1,10 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 
 const ProjectContext = createContext();
+const PROJECTS_KEY = "gms_projects";
+const ACTIVE_PROJECT_KEY = "gms_active_project";
+const LEGACY_PROJECTS_KEY = "bms_projects";
+const LEGACY_ACTIVE_PROJECT_KEY = "bms_active_project";
 
 const DEFAULT_PROJECTS = [
   { id: 1, name: "PowerFrame BMS", description: "Building Management System", color: "#7c3aed", createdAt: "2026-01-15" },
@@ -9,24 +13,30 @@ const DEFAULT_PROJECTS = [
 
 export function ProjectProvider({ children }) {
   const [projects, setProjects] = useState(() => {
-    const saved = localStorage.getItem("bms_projects");
+    const saved =
+      localStorage.getItem(PROJECTS_KEY) ??
+      localStorage.getItem(LEGACY_PROJECTS_KEY);
     return saved ? JSON.parse(saved) : DEFAULT_PROJECTS;
   });
 
   const [activeProject, setActiveProject] = useState(() => {
-    const savedId = localStorage.getItem("bms_active_project");
-    const saved = localStorage.getItem("bms_projects");
+    const savedId =
+      localStorage.getItem(ACTIVE_PROJECT_KEY) ??
+      localStorage.getItem(LEGACY_ACTIVE_PROJECT_KEY);
+    const saved =
+      localStorage.getItem(PROJECTS_KEY) ??
+      localStorage.getItem(LEGACY_PROJECTS_KEY);
     const projectList = saved ? JSON.parse(saved) : DEFAULT_PROJECTS;
     return projectList.find(p => p.id === Number(savedId)) || projectList[0];
   });
 
   useEffect(() => {
-    localStorage.setItem("bms_projects", JSON.stringify(projects));
+    localStorage.setItem(PROJECTS_KEY, JSON.stringify(projects));
   }, [projects]);
 
   useEffect(() => {
     if (activeProject) {
-      localStorage.setItem("bms_active_project", activeProject.id);
+      localStorage.setItem(ACTIVE_PROJECT_KEY, activeProject.id);
     }
   }, [activeProject]);
 
