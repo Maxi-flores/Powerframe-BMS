@@ -1,6 +1,8 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 
 const ThemeContext = createContext();
+const THEME_KEY = "gms_theme";
+const LEGACY_THEME_KEY = "bms_theme";
 
 const THEMES = {
   default: {
@@ -76,7 +78,8 @@ const CUSTOM_BG_PRESETS = [
 
 export function ThemeProvider({ children }) {
   const [theme, setTheme] = useState(() => {
-    const saved = localStorage.getItem("bms_theme");
+    const saved =
+      localStorage.getItem(THEME_KEY) ?? localStorage.getItem(LEGACY_THEME_KEY);
     return saved || "default";
   });
 
@@ -91,7 +94,7 @@ export function ThemeProvider({ children }) {
   });
 
   useEffect(() => {
-    localStorage.setItem("bms_theme", theme);
+    localStorage.setItem(THEME_KEY, theme);
   }, [theme]);
 
   useEffect(() => {
