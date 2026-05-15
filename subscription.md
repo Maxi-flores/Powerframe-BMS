@@ -240,11 +240,11 @@ window.postMessage(
 
 ```css
 .gms-glass-panel {
-  background: rgb(88 28 135 / 0.40);   /* bg-purple-900/40 */
+  background: rgba(88, 28, 135, 0.40); /* bg-purple-900/40 */
   backdrop-filter: blur(14px);         /* backdrop-blur */
   -webkit-backdrop-filter: blur(14px);
-  border: 1px solid rgb(255 255 255 / 0.14); /* fine custom border */
-  box-shadow: 0 8px 30px rgb(0 0 0 / 0.28);
+  border: 1px solid rgba(255, 255, 255, 0.14); /* fine custom border */
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.28);
 }
 ```
 
