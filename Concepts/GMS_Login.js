@@ -1,13 +1,13 @@
 import React, { useState } from "react";
 
 /* =========================================================
-   BMS_V1_WITH_LOGIN.js
+   GMS_V1_WITH_LOGIN.js
    - Login Front Page
    - Dashboard View (from previous version)
    - Simple state-based auth switch
    ========================================================= */
 
-export default function BMS_V1_WITH_LOGIN() {
+export default function GMS_V1_WITH_LOGIN() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   return (
@@ -74,7 +74,7 @@ function Login({ onLogin }) {
 function Dashboard({ onLogout }) {
   return (
     <div style={{ padding: 40, color: "white" }}>
-      <h1>BMS Dashboard V1</h1>
+      <h1>GMS Dashboard V1</h1>
       <p>You are logged in.</p>
       <button onClick={onLogout}>Logout</button>
     </div>
