@@ -7,7 +7,7 @@ import Copilot from "../components/Copilot.jsx";
 export default function DashboardLayout() {
   const navigate = useNavigate();
   const location = useLocation();
-  const { activeProject, projects, switchProject } = useProjects();
+  const { activeProject, projects, switchProject, activeCandidate, clearActiveCandidate } = useProjects();
   const { currentTheme } = useTheme();
 
   const [sidebarExpanded, setSidebarExpanded] = useState(false);
@@ -17,24 +17,24 @@ export default function DashboardLayout() {
   const [search, setSearch] = useState("");
 
   const navItems = [
-    { key: "Dashboard", path: "/bms", icon: Icons.home },
-    { key: "Out", path: "/bms/out", icon: Icons.send },
-    { key: "Tasks", path: "/bms/tasks", icon: Icons.checklist },
-    { key: "Plans", path: "/bms/plans", icon: Icons.calendar },
-    { key: "Web search", path: "/bms/search", icon: Icons.search },
-    { key: "Projects", path: "/bms/projects", icon: Icons.folder },
-    { key: "Bestanden", path: "/bms/files", icon: Icons.archive },
-    { key: "Info", path: "/bms/info", icon: Icons.info },
+    { key: "Dashboard", path: "/gms", icon: Icons.home },
+    { key: "Out", path: "/gms/out", icon: Icons.send },
+    { key: "Tasks", path: "/gms/tasks", icon: Icons.checklist },
+    { key: "Plans", path: "/gms/plans", icon: Icons.calendar },
+    { key: "Web search", path: "/gms/search", icon: Icons.search },
+    { key: "Projects", path: "/gms/projects", icon: Icons.folder },
+    { key: "Bestanden", path: "/gms/files", icon: Icons.archive },
+    { key: "Info", path: "/gms/info", icon: Icons.info },
   ];
 
   const currentPath = location.pathname;
   const activeKey = navItems.find(item =>
-    item.path === currentPath || (item.path !== "/bms" && currentPath.startsWith(item.path))
+    item.path === currentPath || (item.path !== "/gms" && currentPath.startsWith(item.path))
   )?.key || "Dashboard";
 
   function handleLogout() {
     localStorage.removeItem("token");
-    navigate("/bms-login");
+    navigate("/gms-login");
   }
 
   // Close menu when clicking outside
@@ -49,46 +49,46 @@ export default function DashboardLayout() {
   }, [showMenu]);
 
   const dynamicStyles = `
-    .bms-root {
+    .gms-root {
       background: ${currentTheme.customBg || currentTheme.gradient};
     }
-    .bms-bg {
+    .gms-bg {
       background: linear-gradient(90deg, ${currentTheme.bg1}, ${currentTheme.bg2});
     }
-    .bms-nav-btn.is-active {
+    .gms-nav-btn.is-active {
       background: ${currentTheme.accent}22;
       border-color: ${currentTheme.accent}66;
     }
-    .bms-fab {
+    .gms-fab {
       background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.22), transparent 55%), ${currentTheme.accent};
     }
   `;
 
   return (
-    <div className="bms-root">
+    <div className="gms-root">
       <style>{CSS}</style>
       <style>{dynamicStyles}</style>
-      <div className="bms-bg" />
+      <div className="gms-bg" />
 
-      <div className="bms-shell">
+      <div className="gms-shell">
         {/* Collapsible Sidebar */}
         <aside
-          className={`bms-sidebar ${sidebarExpanded ? "expanded" : "collapsed"}`}
+          className={`gms-sidebar ${sidebarExpanded ? "expanded" : "collapsed"}`}
           onMouseEnter={() => setSidebarExpanded(true)}
           onMouseLeave={() => { setSidebarExpanded(false); setShowProjectSwitcher(false); }}
         >
-          <div className="bms-sidebar-inner">
+          <div className="gms-sidebar-inner">
             {/* Brand */}
             <div
-              className="bms-brand"
+              className="gms-brand"
               onClick={() => setShowProjectSwitcher(!showProjectSwitcher)}
             >
-              <div className="bms-brand-icon" style={{ background: activeProject?.color }}>
+              <div className="gms-brand-icon" style={{ background: activeProject?.color }}>
                 {Icons.rocket}
               </div>
-              <div className="bms-brand-meta">
-                <div className="bms-brand-name">{activeProject?.name || "PowerFrame"}</div>
-                <div className="bms-brand-sub">BMS • V1</div>
+              <div className="gms-brand-meta">
+                <div className="gms-brand-name">{activeProject?.name || "PowerFrame"}</div>
+                <div className="gms-brand-sub">GMS • V1</div>
               </div>
             </div>
 
@@ -107,7 +107,7 @@ export default function DashboardLayout() {
                 ))}
                 <button
                   className="project-switch-btn add"
-                  onClick={() => { navigate("/bms/projects"); setShowProjectSwitcher(false); }}
+                  onClick={() => { navigate("/gms/projects"); setShowProjectSwitcher(false); }}
                 >
                   + New Project
                 </button>
@@ -115,22 +115,22 @@ export default function DashboardLayout() {
             )}
 
             {/* Progress */}
-            <div className="bms-version">
-              <div className="bms-version-row">
-                <span className="bms-version-label">V1</span>
-                <span className="bms-version-val">58%</span>
+            <div className="gms-version">
+              <div className="gms-version-row">
+                <span className="gms-version-label">V1</span>
+                <span className="gms-version-val">58%</span>
               </div>
-              <div className="bms-progress">
-                <div className="bms-progress-fill" style={{ width: "58%" }} />
+              <div className="gms-progress">
+                <div className="gms-progress-fill" style={{ width: "58%" }} />
               </div>
             </div>
 
             {/* Navigation */}
-            <nav className="bms-nav">
+            <nav className="gms-nav">
               {navItems.map((it) => (
                 <button
                   key={it.key}
-                  className={`bms-nav-btn ${activeKey === it.key ? "is-active" : ""}`}
+                  className={`gms-nav-btn ${activeKey === it.key ? "is-active" : ""}`}
                   onClick={() => navigate(it.path)}
                   title={it.key}
                 >
@@ -141,54 +141,81 @@ export default function DashboardLayout() {
             </nav>
 
             {/* Bottom controls */}
-            <div className="bms-sidebar-footer">
-              <button className="bms-nav-btn" title="Scroll up">{Icons.chevronUp}</button>
-              <button className="bms-nav-btn" title="Scroll down">{Icons.chevronDown}</button>
+            <div className="gms-sidebar-footer">
+              <button className="gms-nav-btn" title="Scroll up">{Icons.chevronUp}</button>
+              <button className="gms-nav-btn" title="Scroll down">{Icons.chevronDown}</button>
             </div>
           </div>
 
           {/* FAB */}
-          <button className="bms-fab" onClick={() => navigate("/bms/projects")} title="New Project">
-            <span className="bms-fab-plus">+</span>
+          <button className="gms-fab" onClick={() => navigate("/gms/projects")} title="New Project">
+            <span className="gms-fab-plus">+</span>
           </button>
         </aside>
 
         {/* Main Content */}
-        <main className="bms-main">
-          {/* Top Bar */}
-          <header className="bms-topbar">
-            <div className="bms-topbar-left">
-              <div className="bms-topbar-logo">
-                <span className="bms-topbar-logo-mark">{Icons.power}</span>
-                <span className="bms-topbar-logo-text">PowerStarter</span>
+        <main className="gms-main">
+          {/* Semantic Bridge Banner */}
+          {activeCandidate && (
+            <div className="gms-bridge-banner">
+              <div className="gms-bridge-banner-left">
+                <span className="gms-bridge-label">⚡ Bridge Lab</span>
+                <span className="gms-bridge-status">
+                  {activeCandidate.status?.meaning || "—"}
+                </span>
+                {activeCandidate.candidate && (
+                  <span className="gms-bridge-dot" title="UnityAction Candidate Instantiated" />
+                )}
+                {activeCandidate.candidate && (
+                  <span className="gms-bridge-candidate-text">
+                    UnityAction Candidate Instantiated
+                  </span>
+                )}
               </div>
-              <div className="bms-topbar-title">| {activeKey}</div>
+              <button
+                className="gms-bridge-close"
+                onClick={clearActiveCandidate}
+                title="Dismiss"
+              >
+                ×
+              </button>
+            </div>
+          )}
+
+          {/* Top Bar */}
+          <header className="gms-topbar">
+            <div className="gms-topbar-left">
+              <div className="gms-topbar-logo">
+                <span className="gms-topbar-logo-mark">{Icons.power}</span>
+                <span className="gms-topbar-logo-text">PowerStarter</span>
+              </div>
+              <div className="gms-topbar-title">| {activeKey}</div>
             </div>
 
-            <div className="bms-topbar-center">
-              <label className="bms-search-label">Zoeken:</label>
-              <div className="bms-search">
+            <div className="gms-topbar-center">
+              <label className="gms-search-label">Zoeken:</label>
+              <div className="gms-search">
                 <input
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
                   placeholder="Search modules, tasks, projects…"
                 />
-                <span className="bms-search-icon">{Icons.search}</span>
+                <span className="gms-search-icon">{Icons.search}</span>
               </div>
             </div>
 
-            <div className="bms-topbar-right">
-              <button className="bms-topbar-btn" title="Notifications" onClick={() => navigate("/bms/notifications")}>
+            <div className="gms-topbar-right">
+              <button className="gms-topbar-btn" title="Notifications" onClick={() => navigate("/gms/notifications")}>
                 {Icons.bell}
               </button>
-              <button className="bms-topbar-btn" title="Profile" onClick={() => navigate("/bms/profile")}>
+              <button className="gms-topbar-btn" title="Profile" onClick={() => navigate("/gms/profile")}>
                 {Icons.user}
               </button>
 
               {/* Menu Dropdown */}
               <div className="menu-container">
                 <button
-                  className="bms-topbar-btn"
+                  className="gms-topbar-btn"
                   title="Menu"
                   onClick={(e) => { e.stopPropagation(); setShowMenu(!showMenu); }}
                 >
@@ -196,13 +223,13 @@ export default function DashboardLayout() {
                 </button>
                 {showMenu && (
                   <div className="menu-dropdown">
-                    <button onClick={() => { navigate("/bms/profile"); setShowMenu(false); }}>
+                    <button onClick={() => { navigate("/gms/profile"); setShowMenu(false); }}>
                       {Icons.user} <span>Profile</span>
                     </button>
-                    <button onClick={() => { navigate("/bms/settings"); setShowMenu(false); }}>
+                    <button onClick={() => { navigate("/gms/settings"); setShowMenu(false); }}>
                       {Icons.settings} <span>Settings</span>
                     </button>
-                    <button onClick={() => { navigate("/bms/management"); setShowMenu(false); }}>
+                    <button onClick={() => { navigate("/gms/management"); setShowMenu(false); }}>
                       {Icons.management} <span>Management</span>
                     </button>
                     <div className="menu-divider" />
@@ -214,7 +241,7 @@ export default function DashboardLayout() {
               </div>
 
               <button
-                className={`bms-topbar-ai ${showCopilot ? "active" : ""}`}
+                className={`gms-topbar-ai ${showCopilot ? "active" : ""}`}
                 title="AI Copilot"
                 onClick={() => setShowCopilot(!showCopilot)}
               >
@@ -224,15 +251,15 @@ export default function DashboardLayout() {
           </header>
 
           {/* Page Content */}
-          <section className="bms-content">
+          <section className="gms-content">
             <Outlet />
           </section>
 
           {/* Footer */}
-          <footer className="bms-footer">
-            <div className="bms-watermark">
-              <span className="bms-watermark-mark">{Icons.powerSmall}</span>
-              <span className="bms-watermark-text">powerframe</span>
+          <footer className="gms-footer">
+            <div className="gms-watermark">
+              <span className="gms-watermark-mark">{Icons.powerSmall}</span>
+              <span className="gms-watermark-text">powerframe</span>
             </div>
           </footer>
         </main>
@@ -378,7 +405,7 @@ const CSS = `
   html, body { height: 100%; }
   body { margin: 0; font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; }
 
-  .bms-root {
+  .gms-root {
     min-height: 100vh;
     color: rgba(255,255,255,0.92);
     position: relative;
@@ -387,7 +414,7 @@ const CSS = `
                 linear-gradient(135deg, #070614 0%, #0a0619 35%, #1a0b3a 60%, #050514 100%);
   }
 
-  .bms-bg {
+  .gms-bg {
     position: absolute;
     inset: -60px;
     background: linear-gradient(90deg, rgba(120,0,255,0.55), rgba(30,70,255,0.55));
@@ -396,7 +423,7 @@ const CSS = `
     pointer-events: none;
   }
 
-  .bms-shell {
+  .gms-shell {
     position: relative;
     z-index: 1;
     display: flex;
@@ -406,19 +433,19 @@ const CSS = `
   }
 
   /* Collapsible Sidebar */
-  .bms-sidebar {
+  .gms-sidebar {
     position: relative;
     width: var(--sidebar-collapsed);
     min-width: var(--sidebar-collapsed);
     transition: width var(--transition), min-width var(--transition);
   }
 
-  .bms-sidebar.expanded {
+  .gms-sidebar.expanded {
     width: var(--sidebar-expanded);
     min-width: var(--sidebar-expanded);
   }
 
-  .bms-sidebar-inner {
+  .gms-sidebar-inner {
     height: calc(100vh - 36px);
     border-radius: 20px;
     background: linear-gradient(180deg, rgba(35,35,45,0.62), rgba(18,18,25,0.62));
@@ -431,7 +458,7 @@ const CSS = `
   }
 
   /* Brand */
-  .bms-brand {
+  .gms-brand {
     display: flex;
     align-items: center;
     gap: 10px;
@@ -442,11 +469,11 @@ const CSS = `
     overflow: hidden;
   }
 
-  .bms-brand:hover {
+  .gms-brand:hover {
     background: rgba(255,255,255,0.06);
   }
 
-  .bms-brand-icon {
+  .gms-brand-icon {
     width: 38px;
     height: 38px;
     min-width: 38px;
@@ -457,7 +484,7 @@ const CSS = `
     color: white;
   }
 
-  .bms-brand-meta {
+  .gms-brand-meta {
     opacity: 0;
     width: 0;
     overflow: hidden;
@@ -465,13 +492,13 @@ const CSS = `
     transition: opacity var(--transition), width var(--transition);
   }
 
-  .bms-sidebar.expanded .bms-brand-meta {
+  .gms-sidebar.expanded .gms-brand-meta {
     opacity: 1;
     width: auto;
   }
 
-  .bms-brand-name { font-weight: 700; font-size: 13px; }
-  .bms-brand-sub { font-size: 11px; color: rgba(255,255,255,0.45); margin-top: 2px; }
+  .gms-brand-name { font-weight: 700; font-size: 13px; }
+  .gms-brand-sub { font-size: 11px; color: rgba(255,255,255,0.45); margin-top: 2px; }
 
   /* Project Switcher */
   .project-switcher {
@@ -509,7 +536,7 @@ const CSS = `
   }
 
   /* Version/Progress */
-  .bms-version {
+  .gms-version {
     padding: 10px 8px;
     opacity: 0;
     height: 0;
@@ -517,19 +544,19 @@ const CSS = `
     transition: opacity var(--transition), height var(--transition);
   }
 
-  .bms-sidebar.expanded .bms-version {
+  .gms-sidebar.expanded .gms-version {
     opacity: 1;
     height: auto;
   }
 
-  .bms-version-row {
+  .gms-version-row {
     display: flex;
     justify-content: space-between;
     font-size: 11px;
     color: rgba(255,255,255,0.5);
   }
 
-  .bms-progress {
+  .gms-progress {
     margin-top: 6px;
     height: 4px;
     border-radius: 999px;
@@ -537,14 +564,14 @@ const CSS = `
     overflow: hidden;
   }
 
-  .bms-progress-fill {
+  .gms-progress-fill {
     height: 100%;
     border-radius: 999px;
     background: linear-gradient(90deg, rgba(255,255,255,0.75), rgba(130,180,255,0.8));
   }
 
   /* Navigation */
-  .bms-nav {
+  .gms-nav {
     flex: 1;
     display: flex;
     flex-direction: column;
@@ -554,10 +581,10 @@ const CSS = `
     overflow-x: hidden;
   }
 
-  .bms-nav::-webkit-scrollbar { width: 4px; }
-  .bms-nav::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 999px; }
+  .gms-nav::-webkit-scrollbar { width: 4px; }
+  .gms-nav::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 999px; }
 
-  .bms-nav-btn {
+  .gms-nav-btn {
     display: flex;
     align-items: center;
     gap: 12px;
@@ -571,12 +598,12 @@ const CSS = `
     overflow: hidden;
   }
 
-  .bms-nav-btn:hover {
+  .gms-nav-btn:hover {
     background: rgba(255,255,255,0.06);
     color: white;
   }
 
-  .bms-nav-btn.is-active {
+  .gms-nav-btn.is-active {
     background: rgba(120,140,255,0.12);
     border-color: rgba(140,160,255,0.4);
     color: white;
@@ -599,12 +626,12 @@ const CSS = `
     transition: opacity var(--transition), width var(--transition);
   }
 
-  .bms-sidebar.expanded .nav-text {
+  .gms-sidebar.expanded .nav-text {
     opacity: 1;
     width: auto;
   }
 
-  .bms-sidebar-footer {
+  .gms-sidebar-footer {
     display: flex;
     gap: 6px;
     padding-top: 10px;
@@ -612,14 +639,14 @@ const CSS = `
     margin-top: 10px;
   }
 
-  .bms-sidebar-footer .bms-nav-btn {
+  .gms-sidebar-footer .gms-nav-btn {
     flex: 1;
     justify-content: center;
     padding: 10px;
   }
 
   /* FAB */
-  .bms-fab {
+  .gms-fab {
     position: absolute;
     right: -20px;
     bottom: 30px;
@@ -636,15 +663,15 @@ const CSS = `
     transition: transform 0.2s;
   }
 
-  .bms-fab:hover { transform: scale(1.08); }
+  .gms-fab:hover { transform: scale(1.08); }
 
-  .bms-fab-plus {
+  .gms-fab-plus {
     font-size: 28px;
     color: rgba(0,0,0,0.75);
   }
 
   /* Main */
-  .bms-main {
+  .gms-main {
     flex: 1;
     min-width: 0;
     display: flex;
@@ -653,7 +680,7 @@ const CSS = `
   }
 
   /* Top Bar */
-  .bms-topbar {
+  .gms-topbar {
     height: 64px;
     border-radius: 20px;
     background: linear-gradient(90deg, rgba(20,20,28,0.62), rgba(18,18,25,0.45));
@@ -666,14 +693,14 @@ const CSS = `
     flex-shrink: 0;
   }
 
-  .bms-topbar-left {
+  .gms-topbar-left {
     display: flex;
     align-items: center;
     gap: 12px;
     min-width: 240px;
   }
 
-  .bms-topbar-logo {
+  .gms-topbar-logo {
     display: flex;
     align-items: center;
     gap: 10px;
@@ -683,11 +710,11 @@ const CSS = `
     background: rgba(255,255,255,0.04);
   }
 
-  .bms-topbar-logo-mark { display: flex; align-items: center; }
-  .bms-topbar-logo-text { font-weight: 700; font-size: 13px; }
-  .bms-topbar-title { font-weight: 800; font-size: 18px; }
+  .gms-topbar-logo-mark { display: flex; align-items: center; }
+  .gms-topbar-logo-text { font-weight: 700; font-size: 13px; }
+  .gms-topbar-title { font-weight: 800; font-size: 18px; }
 
-  .bms-topbar-center {
+  .gms-topbar-center {
     flex: 1;
     display: flex;
     align-items: center;
@@ -695,15 +722,15 @@ const CSS = `
     min-width: 200px;
   }
 
-  .bms-search-label { font-size: 13px; color: rgba(255,255,255,0.5); }
+  .gms-search-label { font-size: 13px; color: rgba(255,255,255,0.5); }
 
-  .bms-search {
+  .gms-search {
     position: relative;
     flex: 1;
     max-width: 400px;
   }
 
-  .bms-search input {
+  .gms-search input {
     width: 100%;
     height: 38px;
     border-radius: 999px;
@@ -714,9 +741,9 @@ const CSS = `
     outline: none;
   }
 
-  .bms-search input::placeholder { color: rgba(255,255,255,0.35); }
+  .gms-search input::placeholder { color: rgba(255,255,255,0.35); }
 
-  .bms-search-icon {
+  .gms-search-icon {
     position: absolute;
     right: 12px;
     top: 50%;
@@ -725,13 +752,13 @@ const CSS = `
     pointer-events: none;
   }
 
-  .bms-topbar-right {
+  .gms-topbar-right {
     display: flex;
     align-items: center;
     gap: 10px;
   }
 
-  .bms-topbar-btn {
+  .gms-topbar-btn {
     width: 40px;
     height: 40px;
     border-radius: 14px;
@@ -745,7 +772,7 @@ const CSS = `
     transition: background 0.15s;
   }
 
-  .bms-topbar-btn:hover {
+  .gms-topbar-btn:hover {
     background: rgba(255,255,255,0.08);
   }
 
@@ -800,7 +827,7 @@ const CSS = `
     margin: 6px 0;
   }
 
-  .bms-topbar-ai {
+  .gms-topbar-ai {
     width: 46px;
     height: 46px;
     border-radius: 16px;
@@ -814,20 +841,20 @@ const CSS = `
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
-  .bms-topbar-ai:hover {
+  .gms-topbar-ai:hover {
     background: linear-gradient(135deg, rgba(99, 102, 241, 0.3), rgba(139, 92, 246, 0.3));
     border-color: rgba(99, 102, 241, 0.5);
     transform: scale(1.05);
   }
 
-  .bms-topbar-ai.active {
+  .gms-topbar-ai.active {
     background: linear-gradient(135deg, #6366f1, #8b5cf6);
     border-color: transparent;
     box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
   }
 
   /* Content */
-  .bms-content {
+  .gms-content {
     flex: 1;
     min-height: 0;
     border-radius: 22px;
@@ -837,11 +864,11 @@ const CSS = `
     overflow: auto;
   }
 
-  .bms-content::-webkit-scrollbar { width: 8px; }
-  .bms-content::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 999px; }
+  .gms-content::-webkit-scrollbar { width: 8px; }
+  .gms-content::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 999px; }
 
   /* Footer */
-  .bms-footer {
+  .gms-footer {
     height: 36px;
     display: flex;
     align-items: center;
@@ -849,7 +876,7 @@ const CSS = `
     flex-shrink: 0;
   }
 
-  .bms-watermark {
+  .gms-watermark {
     display: flex;
     align-items: center;
     gap: 8px;
@@ -863,13 +890,97 @@ const CSS = `
 
   /* Responsive */
   @media (max-width: 900px) {
-    .bms-topbar-left { min-width: auto; }
-    .bms-topbar-center { display: none; }
+    .gms-topbar-left { min-width: auto; }
+    .gms-topbar-center { display: none; }
   }
 
   @media (max-width: 600px) {
-    .bms-shell { padding: 10px; gap: 10px; }
-    .bms-sidebar { display: none; }
-    .bms-topbar { border-radius: 14px; padding: 0 10px; }
+    .gms-shell { padding: 10px; gap: 10px; }
+    .gms-sidebar { display: none; }
+    .gms-topbar { border-radius: 14px; padding: 0 10px; }
+  }
+
+  /* Semantic Bridge Banner */
+  .gms-bridge-banner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 18px;
+    border-radius: 16px;
+    background: rgba(88, 28, 135, 0.4);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(167, 139, 250, 0.3);
+    flex-shrink: 0;
+    gap: 12px;
+  }
+
+  .gms-bridge-banner-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex: 1;
+    overflow: hidden;
+  }
+
+  .gms-bridge-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.6px;
+    text-transform: uppercase;
+    color: #c4b5fd;
+    white-space: nowrap;
+  }
+
+  .gms-bridge-status {
+    font-size: 12px;
+    color: rgba(255,255,255,0.7);
+    font-family: ui-monospace, monospace;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .gms-bridge-dot {
+    width: 9px;
+    height: 9px;
+    min-width: 9px;
+    border-radius: 50%;
+    background: #4ade80;
+    box-shadow: 0 0 6px #4ade80, 0 0 12px #4ade8066;
+    animation: gms-pulse 1.4s ease-in-out infinite;
+  }
+
+  .gms-bridge-candidate-text {
+    font-size: 11px;
+    color: #4ade80;
+    white-space: nowrap;
+    font-weight: 600;
+  }
+
+  .gms-bridge-close {
+    width: 28px;
+    height: 28px;
+    border-radius: 8px;
+    border: 1px solid rgba(167,139,250,0.3);
+    background: rgba(255,255,255,0.06);
+    color: rgba(255,255,255,0.6);
+    cursor: pointer;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: background 0.15s;
+  }
+
+  .gms-bridge-close:hover {
+    background: rgba(248,113,113,0.2);
+    color: #f87171;
+  }
+
+  @keyframes gms-pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.6; transform: scale(1.2); }
   }
 `;

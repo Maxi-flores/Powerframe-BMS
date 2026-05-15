@@ -34,7 +34,7 @@ export default function Overview() {
   const gridRef = useRef(null);
 
   // Project-scoped tabs stored in localStorage
-  const storageKey = `bms_tabs_${activeProject?.id || "default"}`;
+  const storageKey = `gms_tabs_${activeProject?.id || "default"}`;
   const [tabs, setTabs] = useState(() => {
     const saved = localStorage.getItem(storageKey);
     return saved ? JSON.parse(saved) : DEFAULT_TABS;

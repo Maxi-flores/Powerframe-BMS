@@ -1,6 +1,6 @@
 {
-  "name": "BMS Dashboard",
-  "short_name": "BMS",
+  "name": "GMS Dashboard",
+  "short_name": "GMS",
   "icons": [
     {
       "src": "/src/img/favicon_io/android-chrome-192x192.png",

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 export default function Notifications() {
   const [notifications, setNotifications] = useState([
@@ -7,6 +7,31 @@ export default function Notifications() {
     { id: 3, type: "warning", title: "Storage Warning", message: "You're approaching your storage limit", time: "5 hours ago", read: true },
     { id: 4, type: "info", title: "New Feature", message: "Check out the new calendar view in Plans", time: "1 day ago", read: true },
   ]);
+
+  // Capture TRT_BRIDGE_LAB_CANDIDATE postMessage events as ephemeral alerts
+  useEffect(() => {
+    function handleBridgeMessage(event) {
+      const { type, unityActionCandidate, runtimeStatus } = event.data || {};
+      if (type !== "TRT_BRIDGE_LAB_CANDIDATE") return;
+
+      const bridgeAlert = {
+        id: `bridge-${Date.now()}`,
+        type: "bridge",
+        title: "System Test / Bridge Lab",
+        message: unityActionCandidate?.label
+          ? `[${runtimeStatus?.meaning || "event"}] ${unityActionCandidate.label}`
+          : `Bridge event: ${runtimeStatus?.meaning || "received"}`,
+        time: "Just now",
+        read: false,
+        volatile: true,
+      };
+
+      setNotifications(prev => [bridgeAlert, ...prev]);
+    }
+
+    window.addEventListener("message", handleBridgeMessage);
+    return () => window.removeEventListener("message", handleBridgeMessage);
+  }, []);
 
   function markAllRead() {
     setNotifications(prev => prev.map(n => ({ ...n, read: true })));
@@ -26,7 +51,8 @@ export default function Notifications() {
     info: "ℹ️",
     success: "✅",
     warning: "⚠️",
-    error: "❌"
+    error: "❌",
+    bridge: "⚡",
   };
 
   const unreadCount = notifications.filter(n => !n.read).length;

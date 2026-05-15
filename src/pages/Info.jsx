@@ -50,7 +50,7 @@ export default function Info() {
           <h3>Version</h3>
           <div className="version-info">
             <span className="version-badge">V1.0.0</span>
-            <p>PowerFrame BMS Dashboard</p>
+            <p>PowerFrame GMS Dashboard</p>
             <p className="version-date">Released: February 2026</p>
           </div>
         </div>

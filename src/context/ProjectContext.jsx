@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect } from "react";
+import React, { createContext, useContext, useState, useEffect, useCallback } from "react";
 
 const ProjectContext = createContext();
 const PROJECTS_KEY = "gms_projects";
@@ -7,7 +7,7 @@ const LEGACY_PROJECTS_KEY = "bms_projects";
 const LEGACY_ACTIVE_PROJECT_KEY = "bms_active_project";
 
 const DEFAULT_PROJECTS = [
-  { id: 1, name: "PowerFrame BMS", description: "Building Management System", color: "#7c3aed", createdAt: "2026-01-15" },
+  { id: 1, name: "PowerFrame GMS", description: "Game Manager System", color: "#7c3aed", createdAt: "2026-01-15" },
   { id: 2, name: "Client Portal", description: "Customer facing dashboard", color: "#2563eb", createdAt: "2026-02-01" },
 ];
 
@@ -73,6 +73,47 @@ export function ProjectProvider({ children }) {
     }
   }
 
+  // ── Semantic Bridge (TheRocketTree-App) ───────────────────────────────────
+  const [activeCandidate, setActiveCandidate] = useState(null);
+
+  const clearActiveCandidate = useCallback(() => {
+    setActiveCandidate(null);
+  }, []);
+
+  useEffect(() => {
+    function handleBridgeMessage(event) {
+      const { type, unityActionCandidate, runtimeStatus } = event.data || {};
+      if (type !== "TRT_BRIDGE_LAB_CANDIDATE") return;
+
+      setActiveCandidate({ candidate: unityActionCandidate, status: runtimeStatus });
+
+      // Inject a volatile (in-memory only) testing task into the active project
+      // when the bridge signals an actionable candidate
+      if (runtimeStatus?.meaning && runtimeStatus.meaning !== "no_action") {
+        const volatileTask = {
+          id: `bridge-${Date.now()}`,
+          title: unityActionCandidate?.label || "Bridge Lab Test",
+          description: `[Bridge Lab] ${runtimeStatus.meaning}`,
+          status: "bridge-test",
+          volatile: true,
+          createdAt: new Date().toISOString(),
+        };
+        // Inject into in-memory tasks without touching localStorage or Firebase
+        setActiveProject(prev => {
+          if (!prev) return prev;
+          return {
+            ...prev,
+            _volatileTasks: [...(prev._volatileTasks || []), volatileTask],
+          };
+        });
+      }
+    }
+
+    window.addEventListener("message", handleBridgeMessage);
+    return () => window.removeEventListener("message", handleBridgeMessage);
+  }, []);
+  // ─────────────────────────────────────────────────────────────────────────
+
   return (
     <ProjectContext.Provider
       value={{
@@ -82,6 +123,8 @@ export function ProjectProvider({ children }) {
         updateProject,
         deleteProject,
         switchProject,
+        activeCandidate,
+        clearActiveCandidate,
       }}
     >
       {children}

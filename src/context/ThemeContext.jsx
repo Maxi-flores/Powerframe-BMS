@@ -84,12 +84,12 @@ export function ThemeProvider({ children }) {
   });
 
   const [customBg, setCustomBg] = useState(() => {
-    const saved = localStorage.getItem("bms_custom_bg");
+    const saved = localStorage.getItem("gms_custom_bg");
     return saved || null;
   });
 
   const [customAccent, setCustomAccent] = useState(() => {
-    const saved = localStorage.getItem("bms_custom_accent");
+    const saved = localStorage.getItem("gms_custom_accent");
     return saved || null;
   });
 
@@ -99,17 +99,17 @@ export function ThemeProvider({ children }) {
 
   useEffect(() => {
     if (customBg) {
-      localStorage.setItem("bms_custom_bg", customBg);
+      localStorage.setItem("gms_custom_bg", customBg);
     } else {
-      localStorage.removeItem("bms_custom_bg");
+      localStorage.removeItem("gms_custom_bg");
     }
   }, [customBg]);
 
   useEffect(() => {
     if (customAccent) {
-      localStorage.setItem("bms_custom_accent", customAccent);
+      localStorage.setItem("gms_custom_accent", customAccent);
     } else {
-      localStorage.removeItem("bms_custom_accent");
+      localStorage.removeItem("gms_custom_accent");
     }
   }, [customAccent]);
 
