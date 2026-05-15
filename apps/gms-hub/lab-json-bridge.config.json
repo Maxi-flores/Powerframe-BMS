@@ -24,7 +24,7 @@
     "mount_path": "/bridge-lab",
     "allowed_origins": [
       "https://gms-master-hub.vercel.app",
-      "https://*.vercel.app",
+      "https://gms-master-hub-*.vercel.app",
       "http://localhost:5173"
     ],
     "ingress_contracts": {

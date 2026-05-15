@@ -17,6 +17,8 @@ const requiredFields = Array.isArray(bridgeEventContract.required)
 const eventTypeRules = bridgeEventContract.event_types ?? {}
 const allowedEventTypes = Object.keys(eventTypeRules)
 let activeCandidate = null
+let interceptorCount = 0
+let fallbackCounter = 0
 
 const escapeRegExp = (value) =>
   value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
@@ -171,15 +173,30 @@ const isValidBridgeEventRequest = (candidate) => {
   return hasRequiredPayloadFields(candidate.eventType, candidate.payload)
 }
 
+const deepCloneFallback = (value) => {
+  if (Array.isArray(value)) {
+    return value.map((entry) => deepCloneFallback(entry))
+  }
+
+  if (value instanceof Date) {
+    return value.toISOString()
+  }
+
+  if (isPlainObject(value)) {
+    return Object.fromEntries(
+      Object.entries(value).map(([key, entry]) => [key, deepCloneFallback(entry)]),
+    )
+  }
+
+  return value
+}
+
 const deepClone = (value) => {
   if (typeof structuredClone === 'function') {
     return structuredClone(value)
   }
 
-  const replacer = (_key, item) =>
-    item instanceof Date ? item.toISOString() : item
-
-  return JSON.parse(JSON.stringify(value, replacer))
+  return deepCloneFallback(value)
 }
 
 const generateEventId = () => {
@@ -190,8 +207,12 @@ const generateEventId = () => {
   if (typeof crypto !== 'undefined' && typeof crypto.getRandomValues === 'function') {
     const bytes = new Uint8Array(16)
     crypto.getRandomValues(bytes)
-    bytes[6] = (bytes[6] & 0x0f) | 0x40
-    bytes[8] = (bytes[8] & 0x3f) | 0x80
+    const uuidVersionMask = 0x0f
+    const uuidVersionValue = 0x40
+    const uuidVariantMask = 0x3f
+    const uuidVariantValue = 0x80
+    bytes[6] = (bytes[6] & uuidVersionMask) | uuidVersionValue
+    bytes[8] = (bytes[8] & uuidVariantMask) | uuidVariantValue
     const toHex = (value) => value.toString(16).padStart(2, '0')
     const segments = [
       bytes.slice(0, 4),
@@ -203,13 +224,17 @@ const generateEventId = () => {
     return segments.map((segment) => [...segment].map(toHex).join('')).join('-')
   }
 
-  return `bridge-${Date.now()}-${Math.random().toString(16).slice(2)}`
+  fallbackCounter = (fallbackCounter + 1) % 1000000
+  const randomToken = Math.random().toString(16).slice(2).padEnd(8, '0').slice(0, 8)
+  return `bridge-${Date.now()}-${fallbackCounter}-${randomToken}`
 }
 
 export const initializeActiveCandidateInterceptor = (onValidCandidateCallback) => {
   if (typeof window === 'undefined') {
     return () => {}
   }
+
+  interceptorCount += 1
 
   const handler = (event) => {
     if (!event || !isOriginAllowed(event.origin)) {
@@ -253,7 +278,10 @@ export const initializeActiveCandidateInterceptor = (onValidCandidateCallback) =
 
   return () => {
     window.removeEventListener('message', handler)
-    activeCandidate = null
+    interceptorCount = Math.max(0, interceptorCount - 1)
+    if (interceptorCount === 0) {
+      activeCandidate = null
+    }
   }
 }
 
