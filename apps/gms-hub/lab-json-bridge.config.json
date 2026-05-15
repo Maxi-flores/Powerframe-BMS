@@ -32,10 +32,18 @@
         "required": ["eventType", "payload", "timestamp", "source"],
         "event_types": {
           "inventory.sync": {
-            "payload_required": ["inventoryId", "items"]
+            "payload_required": ["inventoryId", "items"],
+            "payload_shape": {
+              "inventoryId": "string",
+              "items": "array"
+            }
           },
           "cadence.calibrate": {
-            "payload_required": ["cadenceId", "target"]
+            "payload_required": ["cadenceId", "target"],
+            "payload_shape": {
+              "cadenceId": "string",
+              "target": ["string", "number"]
+            }
           }
         }
       }
