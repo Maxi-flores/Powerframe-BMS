@@ -1,5 +1,5 @@
 /* =========================================================
-   GMS_V1.js  — PowerFrame / TRT BMS Dashboard (V1)
+   GMS_V1.jsx — PowerFrame / TRT GMS Dashboard (V1)
    ---------------------------------------------------------
    Single-file React component that replicates the wireframe:
    - Left glass sidebar with icon rail + expandable sections
