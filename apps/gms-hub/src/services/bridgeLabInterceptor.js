@@ -19,6 +19,10 @@ const allowedEventTypes = Object.keys(eventTypeRules)
 let activeCandidate = null
 let interceptorCount = 0
 let fallbackCounter = 0
+const canStructuredClone = typeof structuredClone === 'function'
+const cryptoRef = typeof crypto !== 'undefined' ? crypto : null
+const hasRandomUuid = !!(cryptoRef && typeof cryptoRef.randomUUID === 'function')
+const hasRandomValues = !!(cryptoRef && typeof cryptoRef.getRandomValues === 'function')
 
 const escapeRegExp = (value) =>
   value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
@@ -42,7 +46,7 @@ const buildWildcardMatcher = (pattern) => {
   const hostRegexSource = parsed.hostname
     .split(wildcardToken)
     .map(escapeRegExp)
-    .join('[^.]+')
+    .join('[a-zA-Z0-9-]+')
 
   return {
     protocol: parsed.protocol,
@@ -192,7 +196,7 @@ const deepCloneFallback = (value) => {
 }
 
 const deepClone = (value) => {
-  if (typeof structuredClone === 'function') {
+  if (canStructuredClone) {
     return structuredClone(value)
   }
 
@@ -200,13 +204,13 @@ const deepClone = (value) => {
 }
 
 const generateEventId = () => {
-  if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') {
-    return crypto.randomUUID()
+  if (hasRandomUuid) {
+    return cryptoRef.randomUUID()
   }
 
-  if (typeof crypto !== 'undefined' && typeof crypto.getRandomValues === 'function') {
+  if (hasRandomValues) {
     const bytes = new Uint8Array(16)
-    crypto.getRandomValues(bytes)
+    cryptoRef.getRandomValues(bytes)
     const uuidVersionMask = 0x0f
     const uuidVersionValue = 0x40
     const uuidVariantMask = 0x3f
@@ -225,8 +229,7 @@ const generateEventId = () => {
   }
 
   fallbackCounter = (fallbackCounter + 1) % 1000000
-  const randomToken = Math.random().toString(16).slice(2).padEnd(8, '0').slice(0, 8)
-  return `bridge-${Date.now()}-${fallbackCounter}-${randomToken}`
+  return `bridge-${Date.now()}-${fallbackCounter}`
 }
 
 export const initializeActiveCandidateInterceptor = (onValidCandidateCallback) => {
