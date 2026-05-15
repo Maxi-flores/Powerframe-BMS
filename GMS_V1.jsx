@@ -7,9 +7,9 @@
    - Modular card grid + "Add Widget" tile
    - Gradient background + soft borders + rounded geometry
 
-    Usage (example):
-      import GMS_V1 from "./GMS_V1";
-      export default function App(){ return <GMS_V1 />; }
+   Usage (example):
+     import GMS_V1 from "./GMS_V1";
+     export default function App(){ return <GMS_V1 />; }
 
    Notes:
    - No external UI libs required
