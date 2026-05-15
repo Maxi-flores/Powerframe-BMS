@@ -1,13 +1,13 @@
 import React, { useState } from "react";
 
 /* =========================================================
-   GMS_V1_WITH_LOGIN.js
+   GMS_Login.js
    - Login Front Page
    - Dashboard View (from previous version)
    - Simple state-based auth switch
    ========================================================= */
 
-export default function GMS_V1_WITH_LOGIN() {
+export default function GMSLogin() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   return (
