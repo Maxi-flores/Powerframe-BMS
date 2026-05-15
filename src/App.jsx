@@ -87,14 +87,14 @@ export default function App() {
                 path="/"
                 element={
                   <PrivateRoute>
-                    <Navigate to="/bms" replace />
+                    <Navigate to="/gms" replace />
                   </PrivateRoute>
                 }
               />
 
-              {/* BMS Application */}
+              {/* GMS Application */}
               <Route
-                path="/bms"
+                path="/gms"
                 element={
                   <PrivateRoute>
                     <DashboardLayout />
