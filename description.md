@@ -74,6 +74,8 @@ The login entry screen is segregated from internal views to preserve a clean sec
 - **Stable SSO** — external identity providers remain authoritative
 
 ## 3. SEMANTIC BRIDGE LAB INTEGRATION RULES
+See [GMS Bridge Adapter Plan](docs/bridge/GMS_BRIDGE_ADAPTER_PLAN.md) for the fixture-only `gms` / `quest.started` planning boundary.
+
 ### 3.1 Bridge Lab Layout
 **Bridge Lab** is a testing layout for client inspection and deterministic UI validation. It lives at `/bridge-lab` and stays out of the primary GMS navigation.
 

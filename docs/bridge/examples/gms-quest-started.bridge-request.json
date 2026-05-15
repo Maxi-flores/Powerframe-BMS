@@ -1,0 +1,55 @@
+{
+  "event": {
+    "eventId": "gms-quest-powerframe-bms-started-2026-05-16",
+    "toolId": "gms",
+    "eventName": "quest.started",
+    "summary": {
+      "summaryId": "gms-summary-quest-powerframe-bms-started-2026-05-16",
+      "toolId": "gms",
+      "title": "PowerFrame BMS quest started",
+      "meaning": "GMS selected an active project context and opened a quest-control lane. This is a governance event only; semantic interpretation belongs to TheRocketTree-App.",
+      "occurredAt": "2026-05-16T09:00:00.000Z",
+      "sourceRef": "gms/projects/1",
+      "labels": [
+        "gms",
+        "quest",
+        "quest.started",
+        "project:powerframe-bms",
+        "route:/gms/projects",
+        "control-layer",
+        "governance-event"
+      ]
+    },
+    "occurredAt": "2026-05-16T09:00:00.000Z",
+    "details": {
+      "quest": {
+        "questId": "gms-quest-project-1",
+        "sourceObject": "ProjectContext.activeProject",
+        "projectId": 1,
+        "projectName": "PowerFrame BMS",
+        "projectDescription": "Building Management System",
+        "status": "started"
+      },
+      "routeContext": {
+        "protectedRoot": "/gms",
+        "activeRoute": "/gms/projects",
+        "controlLane": "project-governance"
+      },
+      "governance": {
+        "emitter": "Powerframe-GMS",
+        "directUnityCommand": false,
+        "runtimePosting": false,
+        "firebaseMutation": false
+      },
+      "systemState": {
+        "primaryValue": 1,
+        "secondaryValue": 5,
+        "systemLoad": 0.18,
+        "progress": 0,
+        "iteration": 1,
+        "timestamp": 1778922000000
+      }
+    }
+  },
+  "fixture": "none"
+}
