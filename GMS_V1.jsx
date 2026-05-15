@@ -1,5 +1,5 @@
 /* =========================================================
-   BMS_V1.js  — PowerFrame / TRT BMS Dashboard (V1)
+   GMS_V1.js  — PowerFrame / TRT BMS Dashboard (V1)
    ---------------------------------------------------------
    Single-file React component that replicates the wireframe:
    - Left glass sidebar with icon rail + expandable sections
@@ -7,9 +7,9 @@
    - Modular card grid + "Add Widget" tile
    - Gradient background + soft borders + rounded geometry
 
-   Usage (example):
-     import BMS_V1 from "./BMS_V1";
-     export default function App(){ return <BMS_V1 />; }
+    Usage (example):
+      import GMS_V1 from "./GMS_V1";
+      export default function App(){ return <GMS_V1 />; }
 
    Notes:
    - No external UI libs required
@@ -19,7 +19,7 @@
 
 import React, { useMemo, useState } from "react";
 
-export default function BMS_V1() {
+export default function GMS_V1() {
   const [search, setSearch] = useState("");
   const [active, setActive] = useState("Dashboard");
   const [openSections, setOpenSections] = useState(() => ({
