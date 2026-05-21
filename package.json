@@ -4,6 +4,8 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
+    "predev": "node apps/gms/scripts/sync-layout-tokens.js",
+    "prebuild": "node apps/gms/scripts/sync-layout-tokens.js",
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview"
