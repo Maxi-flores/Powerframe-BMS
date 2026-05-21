@@ -1,0 +1,39 @@
+/* Lightweight structural primitives (token-backed). */
+
+.gms-container {
+  width: 100%;
+  max-width: var(--gms-container-max);
+  margin-inline: auto;
+  padding-inline: var(--gms-spacing-5, 20px);
+}
+
+.gms-container--sm { max-width: var(--gms-container-sm); }
+.gms-container--md { max-width: var(--gms-container-md); }
+.gms-container--lg { max-width: var(--gms-container-lg); }
+.gms-container--xl { max-width: var(--gms-container-xl); }
+.gms-container--max { max-width: var(--gms-container-max); }
+
+.gms-stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gms-spacing-4, 16px);
+  min-width: 0;
+}
+
+.gms-inline {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--gms-spacing-4, 16px);
+  min-width: 0;
+}
+
+.gms-grid {
+  display: grid;
+  gap: var(--gms-spacing-4, 16px);
+  min-width: 0;
+}
+
+.gms-page {
+  padding: var(--gms-spacing-5, 20px);
+}

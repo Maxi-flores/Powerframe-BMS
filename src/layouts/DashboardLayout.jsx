@@ -73,7 +73,7 @@ export default function DashboardLayout() {
       <div className="bms-shell">
         {/* Collapsible Sidebar */}
         <aside
-          className={`bms-sidebar ${sidebarExpanded ? "expanded" : "collapsed"}`}
+          className={`bms-sidebar gms-hide-below-sm ${sidebarExpanded ? "expanded" : "collapsed"}`}
           onMouseEnter={() => setSidebarExpanded(true)}
           onMouseLeave={() => { setSidebarExpanded(false); setShowProjectSwitcher(false); }}
         >
@@ -165,7 +165,7 @@ export default function DashboardLayout() {
               <div className="bms-topbar-title">| {activeKey}</div>
             </div>
 
-            <div className="bms-topbar-center">
+            <div className="bms-topbar-center gms-hide-below-md">
               <label className="bms-search-label">Zoeken:</label>
               <div className="bms-search">
                 <input
@@ -401,8 +401,8 @@ const CSS = `
     z-index: 1;
     display: flex;
     min-height: 100vh;
-    padding: 18px;
-    gap: 18px;
+    padding: var(--gms-shell-padding, 18px);
+    gap: var(--gms-shell-gap, 18px);
   }
 
   /* Collapsible Sidebar */
@@ -655,13 +655,13 @@ const CSS = `
   /* Top Bar */
   .bms-topbar {
     height: 64px;
-    border-radius: 20px;
+    border-radius: var(--gms-topbar-radius, 20px);
     background: linear-gradient(90deg, rgba(20,20,28,0.62), rgba(18,18,25,0.45));
     border: 1px solid rgba(255,255,255,0.14);
     box-shadow: 0 10px 28px rgba(0,0,0,0.35);
     display: flex;
     align-items: center;
-    padding: 0 14px;
+    padding: 0 var(--gms-topbar-padding-x, 14px);
     gap: 14px;
     flex-shrink: 0;
   }
@@ -670,7 +670,7 @@ const CSS = `
     display: flex;
     align-items: center;
     gap: 12px;
-    min-width: 240px;
+    min-width: var(--gms-topbar-left-min, 240px);
   }
 
   .bms-topbar-logo {
@@ -861,15 +861,4 @@ const CSS = `
     text-transform: lowercase;
   }
 
-  /* Responsive */
-  @media (max-width: 900px) {
-    .bms-topbar-left { min-width: auto; }
-    .bms-topbar-center { display: none; }
-  }
-
-  @media (max-width: 600px) {
-    .bms-shell { padding: 10px; gap: 10px; }
-    .bms-sidebar { display: none; }
-    .bms-topbar { border-radius: 14px; padding: 0 10px; }
-  }
 `;
